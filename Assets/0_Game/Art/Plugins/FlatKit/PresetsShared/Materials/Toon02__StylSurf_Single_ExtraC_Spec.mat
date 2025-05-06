@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Toon02__StylSurf_Single_ExtraC_Spec
+  m_Shader: {fileID: 4800000, guid: bee44b4a58655ee4cbff107302a3e131, type: 3}
+  m_Parent: {fileID: 2100000, guid: 8f7c53e504a2d438f86459695b527b18, type: 2}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - DR_CEL_EXTRA_ON
+  - DR_SPECULAR_ON
+  - _CELPRIMARYMODE_SINGLE
+  m_InvalidKeywords:
+  - _FLAT_RIM_ENABLED
+  - _FLAT_SHADOWS_ENABLED
+  - _FLAT_SPECULAR_ENABLED
+  - _UNITYSHADOWMODE_NONE
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses:
+  - SRPDEFAULTUNLIT
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _CelExtraEnabled: 1
+    - _CelPrimaryMode: 1
+    - _FlatRimEdgeSmoothness: 0.006
+    - _FlatRimLightAlign: 0
+    - _FlatRimSize: 0.4
+    - _FlatSpecularSize: 0.16
+    - _GradientCenterY: 0
+    - _GradientEnabled: 0
+    - _GradientSize: 10
+    - _SelfShadingSize: 0.84
+    - _SelfShadingSizeExtra: 0.64
+    - _ShadowEdgeSize: 0.02
+    - _ShadowEdgeSizeExtra: 0.02
+    - _SpecularEnabled: 1
+    - _UnityShadowMode: 0
+    m_Colors:
+    - _ColorDimExtra: {r: 0.6415094, g: 0.19474238, b: 0.021181926, a: 1}
+    - _ColorGradient: {r: 0.65, g: 0.65, b: 0.65, a: 1}
+    - _FlatRimColor: {r: 0, g: 0, b: 0, a: 1}
+    - _FlatSpecularColor: {r: 0.8301887, g: 0.7704247, b: 0.3250267, a: 1}
+  m_BuildTextureStacks: []
