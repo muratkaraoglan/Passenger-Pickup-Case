@@ -1,11 +1,12 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _0_Game.Dev.Scripts.Train
 {
     public class TrainTester : MonoBehaviour
     {
-        public TrainCar testCar;
+        [FormerlySerializedAs("testCar")] public TrainCarMovementController testCarMovementController;
         public Vector3 direction;
         public Vector3 initialMouseInput;
         public float inputThresholdSqr = 100f;
@@ -43,9 +44,9 @@ namespace _0_Game.Dev.Scripts.Train
             if (_move)
             {
                  _move = false;
-                Vector3 newPosition = testCar.transform.position + direction;
+                Vector3 newPosition = testCarMovementController.transform.position + direction;
             
-                testCar.EnqueueTrainMovement(newPosition, Quaternion.LookRotation(direction, Vector3.up));
+                testCarMovementController.EnqueueTrainMovement(newPosition, Quaternion.LookRotation(direction, Vector3.up));
             }
         }
     }

@@ -1,0 +1,156 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 761bc611e5fa465b9d9127c3eb85152e, type: 3}
+  m_Name: LevelConfig
+  m_EditorClassIdentifier: 
+  width: 5
+  height: 7
+  cells:
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 1
+    position: {x: 0, y: 0}
+    isOccupied: 1
+  - type: 1
+    position: {x: 0, y: 0}
+    isOccupied: 1
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 1
+    position: {x: 0, y: 0}
+    isOccupied: 1
+  - type: 1
+    position: {x: 0, y: 0}
+    isOccupied: 1
+  - type: 1
+    position: {x: 0, y: 0}
+    isOccupied: 1
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 1
+    position: {x: 0, y: 0}
+    isOccupied: 1
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  - type: 0
+    position: {x: 0, y: 0}
+    isOccupied: 0
+  trains:
+  - trainColor: 0
+    headDirection: 2
+    wagons:
+    - coord: {x: 0, y: 0}
+    - coord: {x: 1, y: 0}
+    - coord: {x: 2, y: 0}
+    - coord: {x: 2, y: 1}
+  - trainColor: 1
+    headDirection: 0
+    wagons:
+    - coord: {x: 4, y: 5}
+    - coord: {x: 4, y: 4}
+    - coord: {x: 4, y: 3}
+    - coord: {x: 4, y: 2}
+  - trainColor: 2
+    headDirection: 3
+    wagons:
+    - coord: {x: 3, y: 6}
+    - coord: {x: 2, y: 6}
+    - coord: {x: 1, y: 6}
+    - coord: {x: 1, y: 5}
+  - trainColor: 3
+    headDirection: 1
+    wagons:
+    - coord: {x: 3, y: 1}
+    - coord: {x: 3, y: 2}
+    - coord: {x: 3, y: 3}
+    - coord: {x: 2, y: 3}
+    - coord: {x: 2, y: 4}
+    - coord: {x: 2, y: 5}
+  cellPrefab: {fileID: 1427225479584640151, guid: 24e1d7e7173d00b4280caa9afdafc2d7,
+    type: 3}
+  obstaclePrefab: {fileID: 0}

@@ -3980,8 +3980,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f272a83353d74a57afdb99cd8531279f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextTrainCar: {fileID: 1649628440}
-  previousTrainCar: {fileID: 1126322948}
+  nextTrainCarMovementController: {fileID: 1649628440}
+  previousTrainCarMovementController: {fileID: 1126322948}
   delayTime: 0.05
   speed: 5
 --- !u!1001 &715993030
@@ -5424,9 +5424,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3501526ecf594a19857f9146914d58ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testCar: {fileID: 1649628440}
+  testCarMovementController: {fileID: 1649628440}
   direction: {x: 0, y: 0, z: 0}
   initialMouseInput: {x: 0, y: 0, z: 0}
+  inputThresholdSqr: 100
+  gridSize: 1
 --- !u!1 &950687306
 GameObject:
   m_ObjectHideFlags: 0
@@ -6634,8 +6636,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f272a83353d74a57afdb99cd8531279f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextTrainCar: {fileID: 696629581}
-  previousTrainCar: {fileID: 1674109581}
+  nextTrainCarMovementController: {fileID: 696629581}
+  previousTrainCarMovementController: {fileID: 1674109581}
   delayTime: 0.05
   speed: 5
 --- !u!1 &1141693975
@@ -8640,7 +8642,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b02766081164f82bd94ae216e5f238c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridConfig: {fileID: 11400000, guid: 40d37a66fc500d649b4c2be505c0c2f3, type: 2}
 --- !u!4 &1456385884
 Transform:
   m_ObjectHideFlags: 0
@@ -9103,8 +9104,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f272a83353d74a57afdb99cd8531279f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextTrainCar: {fileID: 0}
-  previousTrainCar: {fileID: 696629581}
+  nextTrainCarMovementController: {fileID: 0}
+  previousTrainCarMovementController: {fileID: 696629581}
   delayTime: 0.05
   speed: 5
 --- !u!1001 &1653333002
@@ -9437,8 +9438,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f272a83353d74a57afdb99cd8531279f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextTrainCar: {fileID: 1126322948}
-  previousTrainCar: {fileID: 0}
+  nextTrainCarMovementController: {fileID: 1126322948}
+  previousTrainCarMovementController: {fileID: 0}
   delayTime: 0.05
   speed: 5
 --- !u!1 &1725579345

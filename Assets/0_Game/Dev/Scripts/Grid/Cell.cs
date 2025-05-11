@@ -8,6 +8,7 @@ namespace _0_Game.Dev.Scripts.Grid
     {
         public CellType type;
         public Vector2Int position;
+        public bool isOccupied;
     }
 
     public enum CellType

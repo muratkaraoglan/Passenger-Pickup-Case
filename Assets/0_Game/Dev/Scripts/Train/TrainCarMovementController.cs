@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _0_Game.Dev.Scripts.Train
 {
-    public class TrainCar : MonoBehaviour
+    public class TrainCarMovementController : MonoBehaviour
     {
-        [SerializeField] private TrainCar nextTrainCar;
-        [SerializeField] private TrainCar previousTrainCar;
+        [SerializeField] private TrainCarMovementController nextTrainCarMovementController;
+        [SerializeField] private TrainCarMovementController previousTrainCarMovementController;
         [SerializeField] private float delayTime = .2f;
         [SerializeField] private float speed = 5f;
 
@@ -27,7 +28,7 @@ namespace _0_Game.Dev.Scripts.Train
                 StartCoroutine(ProcessMovements());
             }
 
-            if (previousTrainCar)
+            if (previousTrainCarMovementController)
             {
                 //previousTrainCar.EnqueueTrainMovement( pos, rot);
                 StartCoroutine(DelayedPassMovement(pos, rot));
@@ -37,7 +38,7 @@ namespace _0_Game.Dev.Scripts.Train
         private IEnumerator DelayedPassMovement(Vector3 position, Quaternion rotation)
         {
             yield return new WaitForSeconds(delayTime);
-            previousTrainCar.EnqueueTrainMovement(position, rotation);
+            previousTrainCarMovementController.EnqueueTrainMovement(position, rotation);
         }
 
         private IEnumerator ProcessMovements()
@@ -80,5 +81,13 @@ namespace _0_Game.Dev.Scripts.Train
             Position = pos;
             Rotation = rot;
         }
+    }
+
+    public enum TrainColor
+    {
+        Blue,
+        Pink,
+        Red,
+        Yellow,
     }
 }
