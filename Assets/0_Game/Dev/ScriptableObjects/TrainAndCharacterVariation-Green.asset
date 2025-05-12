@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73531aef6d12479b820e46461c6dc82e, type: 3}
+  m_Name: TrainAndCharacterVariation-Green
+  m_EditorClassIdentifier: 
+  trainColor: 1
+  trainHeadPrefab: {fileID: 8453651822760650080, guid: 4150ba50bb18ad0448942e3910874efb,
+    type: 3}
+  trainBodyPrefab: {fileID: 8984442878218394174, guid: 1c69a651efd98f14eb8e57b43f087ddd,
+    type: 3}
+  trainTailPrefab: {fileID: 4429683031239927148, guid: 227b93c6484b9b743926e12459b2af4e,
+    type: 3}
+  characterPrefab: {fileID: 0}

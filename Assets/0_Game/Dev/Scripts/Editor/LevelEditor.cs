@@ -188,6 +188,7 @@ namespace _0_Game.Dev.Scripts.Editor
                         OnCellClicked(coordinates);
                     }
 
+                    _currentLevelConfig.GetCell(coordinates).coord = coordinates;
                     _buttonRects[coordinates] = buttonRect;
                 }
 
@@ -280,8 +281,9 @@ namespace _0_Game.Dev.Scripts.Editor
             {
                 case TrainColor.Blue: return Color.blue;
                 case TrainColor.Red: return Color.red;
-                case TrainColor.Pink: return Color.magenta;
-                case TrainColor.Yellow: return Color.yellow;
+                case TrainColor.Purple: return new Color32(128, 0, 128, 255);
+                case TrainColor.Orange: return new Color32(255, 165, 0, 255);
+                case TrainColor.Green:return Color.green;
                 default: return Color.clear;
             }
         }

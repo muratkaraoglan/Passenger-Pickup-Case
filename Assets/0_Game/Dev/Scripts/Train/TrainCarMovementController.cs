@@ -16,6 +16,12 @@ namespace _0_Game.Dev.Scripts.Train
         private bool _isProcessingMovement;
         private readonly Queue<TrainMovement> _trainMovementQueue = new Queue<TrainMovement>();
 
+        public void SetPreviousTrainCarMovementController(TrainCarMovementController preCarMovementController) =>
+            previousTrainCarMovementController = preCarMovementController;
+
+        public void SetNextTrainCarMovementController(TrainCarMovementController nextCarMovementController) =>
+            nextTrainCarMovementController = nextCarMovementController;
+
         public void EnqueueTrainMovement(Vector3 position, Quaternion rotation)
         {
             _trainMovementQueue.Enqueue(new TrainMovement(position, rotation));
@@ -86,8 +92,9 @@ namespace _0_Game.Dev.Scripts.Train
     public enum TrainColor
     {
         Blue,
-        Pink,
+        Green,
+        Orange,
+        Purple,
         Red,
-        Yellow,
     }
 }

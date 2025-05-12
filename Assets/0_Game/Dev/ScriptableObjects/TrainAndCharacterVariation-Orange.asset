@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73531aef6d12479b820e46461c6dc82e, type: 3}
+  m_Name: TrainAndCharacterVariation-Orange
+  m_EditorClassIdentifier: 
+  trainColor: 2
+  trainHeadPrefab: {fileID: 1347119206216484665, guid: 6eec876835a99524b92f04f77138908c,
+    type: 3}
+  trainBodyPrefab: {fileID: 7624690258670278376, guid: b710c0a653b2204419d1b02b8c422ed3,
+    type: 3}
+  trainTailPrefab: {fileID: 5664656869609494318, guid: da80a71a35482d44495c5161b014f321,
+    type: 3}
+  characterPrefab: {fileID: 0}

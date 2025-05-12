@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73531aef6d12479b820e46461c6dc82e, type: 3}
+  m_Name: TrainAndCharacterVariation-Purple
+  m_EditorClassIdentifier: 
+  trainColor: 3
+  trainHeadPrefab: {fileID: 1916770231450327008, guid: 9489bb6bd8c243a429ffeb96ebc7fc37,
+    type: 3}
+  trainBodyPrefab: {fileID: 6813961357940572011, guid: ff43e88f47fc7314da839aaece43b5a6,
+    type: 3}
+  trainTailPrefab: {fileID: 84291420952853757, guid: e548d87629914534aa05c773378fe581,
+    type: 3}
+  characterPrefab: {fileID: 0}
