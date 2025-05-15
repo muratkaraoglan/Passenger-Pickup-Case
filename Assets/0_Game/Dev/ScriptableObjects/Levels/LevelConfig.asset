@@ -155,3 +155,9 @@ MonoBehaviour:
     type: 3}
   obstaclePrefab: {fileID: 4233259448093636012, guid: 175917e40276e0b448694c3604827fb9,
     type: 3}
+  wallPrefab: {fileID: 3320737505873927810, guid: 9d6b729527d2d1645a08e766fc096291,
+    type: 3}
+  cornerWallPrefab: {fileID: 4812300869688979223, guid: 68a491904befc334e9ed6f4cc63ed370,
+    type: 3}
+  wallOffset: 0.6
+  innerEdgeOffset: 0.4

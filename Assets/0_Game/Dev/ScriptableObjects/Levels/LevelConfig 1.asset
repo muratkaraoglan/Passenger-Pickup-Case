@@ -39,31 +39,31 @@ MonoBehaviour:
   - type: 0
     coord: {x: 2, y: 1}
     isOccupied: 0
-  - type: 0
+  - type: 2
     coord: {x: 3, y: 1}
-    isOccupied: 0
+    isOccupied: 1
   - type: 0
     coord: {x: 4, y: 1}
     isOccupied: 0
-  - type: 1
+  - type: 2
     coord: {x: 0, y: 2}
     isOccupied: 1
-  - type: 1
+  - type: 2
     coord: {x: 1, y: 2}
     isOccupied: 1
   - type: 0
     coord: {x: 2, y: 2}
     isOccupied: 0
-  - type: 0
+  - type: 2
     coord: {x: 3, y: 2}
-    isOccupied: 0
+    isOccupied: 1
   - type: 0
     coord: {x: 4, y: 2}
     isOccupied: 0
-  - type: 1
+  - type: 2
     coord: {x: 0, y: 3}
     isOccupied: 1
-  - type: 1
+  - type: 2
     coord: {x: 1, y: 3}
     isOccupied: 1
   - type: 0
@@ -99,10 +99,10 @@ MonoBehaviour:
   - type: 0
     coord: {x: 2, y: 5}
     isOccupied: 0
-  - type: 1
+  - type: 2
     coord: {x: 3, y: 5}
     isOccupied: 1
-  - type: 1
+  - type: 2
     coord: {x: 4, y: 5}
     isOccupied: 1
   - type: 0
@@ -114,10 +114,10 @@ MonoBehaviour:
   - type: 0
     coord: {x: 2, y: 6}
     isOccupied: 0
-  - type: 1
+  - type: 2
     coord: {x: 3, y: 6}
     isOccupied: 1
-  - type: 1
+  - type: 2
     coord: {x: 4, y: 6}
     isOccupied: 1
   - type: 0
@@ -148,3 +148,9 @@ MonoBehaviour:
     type: 3}
   obstaclePrefab: {fileID: 4233259448093636012, guid: 175917e40276e0b448694c3604827fb9,
     type: 3}
+  wallPrefab: {fileID: 3320737505873927810, guid: 9d6b729527d2d1645a08e766fc096291,
+    type: 3}
+  cornerWallPrefab: {fileID: 4812300869688979223, guid: 68a491904befc334e9ed6f4cc63ed370,
+    type: 3}
+  wallOffset: 0.6
+  innerEdgeOffset: 0.4
