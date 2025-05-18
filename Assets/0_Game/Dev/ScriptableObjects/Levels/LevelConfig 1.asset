@@ -23,7 +23,7 @@ MonoBehaviour:
     isOccupied: 0
   - type: 0
     coord: {x: 2, y: 0}
-    isOccupied: 0
+    isOccupied: 1
   - type: 0
     coord: {x: 3, y: 0}
     isOccupied: 0
@@ -38,37 +38,37 @@ MonoBehaviour:
     isOccupied: 0
   - type: 0
     coord: {x: 2, y: 1}
-    isOccupied: 0
-  - type: 2
-    coord: {x: 3, y: 1}
     isOccupied: 1
+  - type: 0
+    coord: {x: 3, y: 1}
+    isOccupied: 0
   - type: 0
     coord: {x: 4, y: 1}
     isOccupied: 0
-  - type: 2
+  - type: 0
     coord: {x: 0, y: 2}
-    isOccupied: 1
-  - type: 2
+    isOccupied: 0
+  - type: 0
     coord: {x: 1, y: 2}
-    isOccupied: 1
+    isOccupied: 0
   - type: 0
     coord: {x: 2, y: 2}
-    isOccupied: 0
-  - type: 2
-    coord: {x: 3, y: 2}
     isOccupied: 1
+  - type: 0
+    coord: {x: 3, y: 2}
+    isOccupied: 0
   - type: 0
     coord: {x: 4, y: 2}
     isOccupied: 0
-  - type: 2
+  - type: 0
     coord: {x: 0, y: 3}
-    isOccupied: 1
-  - type: 2
+    isOccupied: 0
+  - type: 0
     coord: {x: 1, y: 3}
-    isOccupied: 1
+    isOccupied: 0
   - type: 0
     coord: {x: 2, y: 3}
-    isOccupied: 0
+    isOccupied: 1
   - type: 0
     coord: {x: 3, y: 3}
     isOccupied: 0
@@ -99,12 +99,12 @@ MonoBehaviour:
   - type: 0
     coord: {x: 2, y: 5}
     isOccupied: 0
-  - type: 2
+  - type: 0
     coord: {x: 3, y: 5}
-    isOccupied: 1
-  - type: 2
+    isOccupied: 0
+  - type: 0
     coord: {x: 4, y: 5}
-    isOccupied: 1
+    isOccupied: 0
   - type: 0
     coord: {x: 0, y: 6}
     isOccupied: 0
@@ -114,12 +114,12 @@ MonoBehaviour:
   - type: 0
     coord: {x: 2, y: 6}
     isOccupied: 0
-  - type: 2
+  - type: 0
     coord: {x: 3, y: 6}
-    isOccupied: 1
-  - type: 2
+    isOccupied: 0
+  - type: 0
     coord: {x: 4, y: 6}
-    isOccupied: 1
+    isOccupied: 0
   - type: 0
     coord: {x: 0, y: 7}
     isOccupied: 0
@@ -139,11 +139,10 @@ MonoBehaviour:
   - trainColor: 0
     headDirection: 0
     wagons:
-    - coord: {x: 1, y: 6}
-    - coord: {x: 1, y: 5}
-    - coord: {x: 2, y: 5}
-    - coord: {x: 2, y: 4}
-    - coord: {x: 3, y: 4}
+    - coord: {x: 2, y: 3}
+    - coord: {x: 2, y: 2}
+    - coord: {x: 2, y: 1}
+    - coord: {x: 2, y: 0}
   cellPrefab: {fileID: 1427225479584640151, guid: 24e1d7e7173d00b4280caa9afdafc2d7,
     type: 3}
   obstaclePrefab: {fileID: 4233259448093636012, guid: 175917e40276e0b448694c3604827fb9,

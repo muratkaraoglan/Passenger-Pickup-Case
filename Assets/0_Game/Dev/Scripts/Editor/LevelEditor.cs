@@ -9,18 +9,44 @@ using UnityEngine;
 
 namespace _0_Game.Dev.Scripts.Editor
 {
+    public enum LevelEditorModeType
+    {
+        GridMode,
+        TrainMode,
+        PassengerMode,
+    }
+
     public class LevelEditor : EditorWindow
     {
         private LevelConfig _currentLevelConfig;
         private CellType _currentCellType = CellType.Empty;
         private TrainColor _currentTrainColor;
         private Direction _currentTrainHeadDirection;
-        private bool _isTrainMode;
         private Vector2 _scrollPos;
         private TrainHolder _currentTrainHolder;
         private List<Vector2Int> _possiblePlacements = new List<Vector2Int>();
         private Dictionary<Vector2Int, Rect> _buttonRects = new Dictionary<Vector2Int, Rect>();
-        private GUIStyle customButtonStyle;
+        private GUIStyle _customButtonStyle;
+
+        #region LevelEditorMode
+
+        private LevelEditorModeType _levelEditorCurrentMode = 0;
+        private readonly float _modeButtonWidth = 400f;
+        private readonly float _modeButtonHeight = 30f;
+        private readonly string[] _modeOptionsNames = { "Grid Mode", "Train Mode", "Passenger Mode" };
+
+        #endregion
+
+        #region PassengerButtonSettings
+
+        private const float OffsetTop = 25f;
+        private const float OffsetBottom = 55f;
+        private const float OffsetSideLeft = 25f;
+        private const float OffsetSideRight = 55f;
+        private const float PassengerButtonSize = 20f;
+
+        #endregion
+
 
         [MenuItem("Tools/Level Editor")]
         private static void ShowWindow()
@@ -34,7 +60,7 @@ namespace _0_Game.Dev.Scripts.Editor
 
         private void OnGUI()
         {
-            customButtonStyle = new GUIStyle(GUI.skin.button)
+            _customButtonStyle = new GUIStyle(GUI.skin.button)
             {
                 fontSize = 25,
                 normal =
@@ -56,15 +82,15 @@ namespace _0_Game.Dev.Scripts.Editor
                 return;
             }
 
+            DrawModeButtons();
+
             EditorGUILayout.BeginHorizontal();
 
-            _isTrainMode = EditorGUILayout.Toggle("Train Mode", _isTrainMode);
-
-            if (!_isTrainMode)
+            if (_levelEditorCurrentMode == LevelEditorModeType.GridMode)
             {
                 DrawCellMode();
             }
-            else
+            else if (_levelEditorCurrentMode == LevelEditorModeType.TrainMode)
             {
                 DrawTrainMode();
             }
@@ -78,6 +104,18 @@ namespace _0_Game.Dev.Scripts.Editor
         }
 
         #region Draws
+
+        private void DrawModeButtons()
+        {
+            float xPos = (position.width - _modeButtonWidth) / 2f;
+
+            float yPos = position.height - _modeButtonHeight - 10f;
+
+            Rect selectionGridRect = new Rect(xPos, yPos, _modeButtonWidth, _modeButtonHeight);
+
+            _levelEditorCurrentMode = (LevelEditorModeType)GUI.SelectionGrid(selectionGridRect,
+                (int)_levelEditorCurrentMode, _modeOptionsNames, _modeOptionsNames.Length);
+        }
 
         private void DrawCellMode()
         {
@@ -100,17 +138,23 @@ namespace _0_Game.Dev.Scripts.Editor
                 {
                     _currentLevelConfig.trains.Add(_currentTrainHolder);
 
+                    foreach (var wagon in _currentTrainHolder.wagons)
+                    {
+                        _currentLevelConfig.GetCell(wagon.coord).isOccupied = true;
+                    }
+                    
                     _currentTrainHolder = null;
-                    _isTrainMode = false;
+                    _levelEditorCurrentMode = LevelEditorModeType.GridMode;
                 }
             }
 
+            EditorGUILayout.HelpBox(_errorMsg, MessageType.Info, true);
             EditorGUILayout.EndVertical();
         }
 
         private void DrawCellColor()
         {
-            if (_isTrainMode) return;
+            if (_levelEditorCurrentMode == LevelEditorModeType.TrainMode) return;
 
             EditorGUILayout.BeginVertical();
             foreach (CellType cellType in Enum.GetValues(typeof(CellType)))
@@ -135,7 +179,6 @@ namespace _0_Game.Dev.Scripts.Editor
                 _currentLevelConfig.cells = new Cell[_currentLevelConfig.width * _currentLevelConfig.height];
 
             GUILayout.Space(50);
-
             for (int y = _currentLevelConfig.height - 1; y >= 0; y--)
             {
                 EditorGUILayout.BeginHorizontal();
@@ -168,24 +211,29 @@ namespace _0_Game.Dev.Scripts.Editor
                             switch (trainHolder.headDirection)
                             {
                                 case Direction.Up:
-                                    customButtonStyle.alignment = TextAnchor.UpperCenter;
+                                    _customButtonStyle.alignment = TextAnchor.UpperCenter;
                                     break;
                                 case Direction.Down:
-                                    customButtonStyle.alignment = TextAnchor.LowerCenter;
+                                    _customButtonStyle.alignment = TextAnchor.LowerCenter;
                                     break;
                                 case Direction.Right:
-                                    customButtonStyle.alignment = TextAnchor.MiddleRight;
+                                    _customButtonStyle.alignment = TextAnchor.MiddleRight;
                                     break;
                                 case Direction.Left:
-                                    customButtonStyle.alignment = TextAnchor.MiddleLeft;
+                                    _customButtonStyle.alignment = TextAnchor.MiddleLeft;
                                     break;
                             }
                         }
                     }
 
-                    if (GUI.Button(buttonRect, buttonText, customButtonStyle))
+                    if (GUI.Button(buttonRect, buttonText, _customButtonStyle))
                     {
                         OnCellClicked(coordinates);
+                    }
+
+                    if (_levelEditorCurrentMode == LevelEditorModeType.PassengerMode)
+                    {
+                        DrawPassengerButton(x, y, buttonRect, _currentLevelConfig.width, _currentLevelConfig.height);
                     }
 
                     _currentLevelConfig.GetCell(coordinates).coord = coordinates;
@@ -198,8 +246,42 @@ namespace _0_Game.Dev.Scripts.Editor
             }
 
             GUI.backgroundColor = Color.white;
-            if (_isTrainMode)
-                EditorGUILayout.HelpBox(_errorMsg, MessageType.Info);
+        }
+
+        private void DrawPassengerButton(int x, int y, Rect buttonRect, int gridWidth, int gridHeight)
+        {
+            if (y == gridHeight - 1) // Bottom edge
+            {
+                var rect = new Rect(buttonRect.x, buttonRect.y - OffsetTop, buttonRect.width, PassengerButtonSize);
+                TryDrawButton(rect, "T");
+            }
+            else if (y == 0) // Top edge
+            {
+                var rect = new Rect(buttonRect.x, buttonRect.y + OffsetBottom, buttonRect.width, PassengerButtonSize);
+                TryDrawButton(rect, "B");
+            }
+
+            if (x == gridWidth - 1) // Right edge
+            {
+                var rect = new Rect(buttonRect.x + OffsetSideRight, buttonRect.y, PassengerButtonSize,
+                    buttonRect.height);
+                TryDrawButton(rect, "R");
+            }
+            else if (x == 0) // Left edge
+            {
+                var rect = new Rect(buttonRect.x - OffsetSideLeft, buttonRect.y, PassengerButtonSize,
+                    buttonRect.height);
+                TryDrawButton(rect, "L");
+            }
+        }
+
+        private void TryDrawButton(Rect rect, string label)
+        {
+            GUI.backgroundColor = Color.white;
+            if (GUI.Button(rect, label))
+            {
+                Debug.Log($"Button {label} clicked at {rect}");
+            }
         }
 
         private void DrawConnectionLines()
@@ -237,6 +319,7 @@ namespace _0_Game.Dev.Scripts.Editor
 
         #endregion
 
+        #region Colors
 
         private (Color, string) GetColorAndNameForCell(Vector2Int coord)
         {
@@ -247,7 +330,7 @@ namespace _0_Game.Dev.Scripts.Editor
                 return (GetColorForTrain(trainHolder.trainColor), DirectionText(trainHolder.headDirection));
             }
 
-            if (_isTrainMode)
+            if (_levelEditorCurrentMode == LevelEditorModeType.TrainMode)
             {
                 if (_currentTrainHolder != null)
                 {
@@ -262,7 +345,6 @@ namespace _0_Game.Dev.Scripts.Editor
             var cell = _currentLevelConfig.GetCell(coord);
             return (GetDefaultCellColor(cell.type), "");
         }
-
 
         private Color GetDefaultCellColor(CellType cellType)
         {
@@ -283,10 +365,14 @@ namespace _0_Game.Dev.Scripts.Editor
                 case TrainColor.Red: return Color.red;
                 case TrainColor.Purple: return new Color32(128, 0, 128, 255);
                 case TrainColor.Orange: return new Color32(255, 165, 0, 255);
-                case TrainColor.Green:return Color.green;
+                case TrainColor.Green: return Color.green;
                 default: return Color.clear;
             }
         }
+
+        #endregion
+
+        #region Directions
 
         private string DirectionText(Direction direction)
         {
@@ -332,6 +418,7 @@ namespace _0_Game.Dev.Scripts.Editor
             return Direction.Up;
         }
 
+        #endregion
 
         private bool IsCellOccupiedByTrainInLevel(Vector2Int coord)
         {
@@ -361,7 +448,8 @@ namespace _0_Game.Dev.Scripts.Editor
 
         private void OnCellClicked(Vector2Int coord)
         {
-            if (_isTrainMode)
+            if (_levelEditorCurrentMode == LevelEditorModeType.PassengerMode) return;
+            if (_levelEditorCurrentMode == LevelEditorModeType.TrainMode)
             {
                 if (!IsCellEmpty(coord)) return;
 

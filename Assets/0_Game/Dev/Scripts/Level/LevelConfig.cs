@@ -1,8 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using _0_Game.Dev.Scripts.Grid;
 using _0_Game.Dev.Scripts.Train;
-using UnityEngine.Serialization;
 
 namespace _0_Game.Dev.Scripts.Level
 {
@@ -20,7 +20,7 @@ namespace _0_Game.Dev.Scripts.Level
         [SerializeField] private GameObject cornerWallPrefab;
         [SerializeField] private float wallOffset = .6f;
         [SerializeField] private float innerEdgeOffset = .4f;
-        
+
         public Cell GetCell(Vector2Int coord)
         {
             if (coord.x >= 0 && coord.x < width && coord.y >= 0 && coord.y < height)
@@ -28,10 +28,10 @@ namespace _0_Game.Dev.Scripts.Level
             return null;
         }
 
-        public void InitializeGrid(Transform parent)
+        public Dictionary<Vector3, NodeBase> InitializeGrid(Transform parent)
         {
-            var grid = new Dictionary<Vector3, Cell>();
-            // level editorde yerlestirilen wagonlar icin o hucreyi occupied yap
+            var grid = new Dictionary<Vector3, NodeBase>();
+
             var startXOffset = -width / 2;
             var startYOffset = -height / 2;
             for (int y = 0; y < height; y++)
@@ -39,15 +39,27 @@ namespace _0_Game.Dev.Scripts.Level
                 for (int x = 0; x < width; x++)
                 {
                     var cell = cells[y * width + x];
+
+                    var squareNode = new SquareNode
+                    {
+                        IsEmpty = !cell.isOccupied,
+                        Coord = new SquareCoord()
+                    };
+                    squareNode.Coord.Position = new Vector3(startXOffset + x
+                        , 0
+                        , startYOffset + y);
+
+                    grid.Add(new Vector3(startXOffset + x, 0, startYOffset + y), squareNode);
+
                     var current = new Vector2Int(x, y);
                     if (cell.type == CellType.NotAvailable)
                     {
-                        TryPlaceCornerInner(current, Vector2Int.left, Vector2Int.down,
-                            new Vector3(startXOffset - innerEdgeOffset, 0.022f, startYOffset - innerEdgeOffset),
-                            Quaternion.Euler(0, -90, 0));     
-                        TryPlaceCornerInner(current, Vector2Int.left, Vector2Int.up,
-                            new Vector3(startXOffset - innerEdgeOffset, 0, startYOffset + innerEdgeOffset),
-                            Quaternion.identity);
+                        // TryPlaceCornerInner(current, Vector2Int.left, Vector2Int.down,
+                        //     new Vector3(startXOffset - innerEdgeOffset, 0.022f, startYOffset - innerEdgeOffset),
+                        //     Quaternion.Euler(0, -90, 0));     
+                        // TryPlaceCornerInner(current, Vector2Int.left, Vector2Int.up,
+                        //     new Vector3(startXOffset - innerEdgeOffset, 0, startYOffset + innerEdgeOffset),
+                        //     Quaternion.identity);
                         continue;
                     }
 
@@ -81,6 +93,8 @@ namespace _0_Game.Dev.Scripts.Level
                         Quaternion.Euler(0, -270, 0));
                 }
             }
+
+            return grid;
         }
 
         private void TryPlaceWall(Vector2Int current, Vector2Int direction, Vector3 positionOffset, Quaternion rotation)
@@ -124,5 +138,13 @@ namespace _0_Game.Dev.Scripts.Level
                 Instantiate(cornerWallPrefab, pos, rotation);
             }
         }
+    }
+
+    [Serializable]
+    public class PassengerData
+    {
+        public Vector2Int coord;
+        public TrainColor color;
+        public int passengerCount;
     }
 }
