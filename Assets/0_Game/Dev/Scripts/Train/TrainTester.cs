@@ -27,7 +27,7 @@ namespace _0_Game.Dev.Scripts.Train
                 if (delta.sqrMagnitude < inputThresholdSqr) return;
 
                 direction = Vector3.zero;
-                
+
                 if (Mathf.Abs(delta.x) > Mathf.Abs(delta.y))
                 {
                     direction.x = delta.x > 0 ? gridSize : -gridSize;
@@ -36,17 +36,18 @@ namespace _0_Game.Dev.Scripts.Train
                 {
                     direction.z = delta.y > 0 ? gridSize : -gridSize;
                 }
-                
+
                 initialMouseInput = newMousePosition;
                 _move = true;
             }
 
             if (_move)
             {
-                 _move = false;
+                _move = false;
                 Vector3 newPosition = testCarMovementController.transform.position + direction;
-            
-                testCarMovementController.EnqueueTrainMovement(newPosition, Quaternion.LookRotation(direction, Vector3.up));
+
+                testCarMovementController.EnqueueTrainMovement(newPosition,
+                    Quaternion.LookRotation(direction, Vector3.up), true);
             }
         }
     }

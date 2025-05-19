@@ -18,12 +18,17 @@ namespace _0_Game.Dev.Scripts.Train
         private bool _isProcessingMovement;
         private readonly Queue<TrainMovement> _trainMovementQueue = new Queue<TrainMovement>();
         private TrainMovement _lastTrainMovement;
+        [HideInInspector] public bool isTail;
 
         private void Start()
         {
-            _lastTrainMovement = new TrainMovement();
-            _lastTrainMovement.Position = transform.position;
-            _lastTrainMovement.Rotation = transform.rotation;
+            _lastTrainMovement = new TrainMovement
+            {
+                Position = transform.position,
+                Rotation = transform.rotation,
+                IsForwardMovement = true
+            };
+            if (previousTrainCarMovementController == null) isTail = true;
         }
 
         public void SetPreviousTrainCarMovementController(TrainCarMovementController preCarMovementController) =>
@@ -32,9 +37,9 @@ namespace _0_Game.Dev.Scripts.Train
         public void SetNextTrainCarMovementController(TrainCarMovementController nextCarMovementController) =>
             nextTrainCarMovementController = nextCarMovementController;
 
-        public void EnqueueTrainMovement(Vector3 position, Quaternion rotation)
+        public void EnqueueTrainMovement(Vector3 position, Quaternion rotation, bool isForwardMovement)
         {
-            var trainMovement = new TrainMovement(position, rotation);
+            var trainMovement = new TrainMovement(position, rotation, isForwardMovement);
             _trainMovementQueue.Enqueue(trainMovement);
 
             if (!_isProcessingMovement)
@@ -42,12 +47,11 @@ namespace _0_Game.Dev.Scripts.Train
                 StartCoroutine(ProcessMovements());
             }
 
-            if (previousTrainCarMovementController)
-            {
-                previousTrainCarMovementController.EnqueueTrainMovement(_lastTrainMovement.Position,
-                    _lastTrainMovement.Rotation);
-                //StartCoroutine(DelayedPassMovement(_lastTrainMovement.Position, _lastTrainMovement.Rotation));
-            }
+            var controller = isForwardMovement ? previousTrainCarMovementController : nextTrainCarMovementController;
+
+            if (controller != null)
+                controller.EnqueueTrainMovement(_lastTrainMovement.Position, _lastTrainMovement.Rotation,
+                    isForwardMovement);
 
             _lastTrainMovement = trainMovement;
         }
@@ -61,55 +65,75 @@ namespace _0_Game.Dev.Scripts.Train
             return Quaternion.LookRotation(direction, Vector3.up);
         }
 
-        private IEnumerator DelayedPassMovement(Vector3 position, Quaternion rotation)
-        {
-            //yield return new WaitForSeconds(delayTime);
-            yield return null;
-            previousTrainCarMovementController.EnqueueTrainMovement(position, rotation);
-        }
-
         private IEnumerator ProcessMovements()
         {
             _isProcessingMovement = true;
+            bool lastMovementFromHead = _lastTrainMovement.IsForwardMovement;
 
             while (_trainMovementQueue.Count > 0)
             {
                 GridManager.Instance.SetNodeState(transform.position, true);
-                
+
                 var current = _trainMovementQueue.Dequeue();
-                var rotation =
-                    CalculateRotation(transform.position, current.Position);
 
-                float distanceToTarget = Vector3.Distance(transform.position, current.Position);
-                float journeyTime = distanceToTarget / speed;
-                float elapsedTime = 0;
-                Vector3 startPos = transform.position;
-                Quaternion startRot = transform.rotation;
+                var rotation = CalculateRotation(transform.position, current.Position);
+                rotation = current.IsForwardMovement ? rotation : rotation * Quaternion.Euler(0, 180, 0);
 
-                while (elapsedTime < journeyTime)
-                {
-                    elapsedTime += Time.deltaTime;
-                    float t = Mathf.Clamp01(elapsedTime / journeyTime);
+                yield return PerformMovement(current.Position, rotation);
 
-                    transform.position = Vector3.Lerp(startPos, current.Position, t);
-                    transform.rotation = Quaternion.Slerp(startRot, rotation, t);
-
-                    yield return null;
-                }
-
-                transform.position = current.Position;
-                transform.rotation = rotation;
+                lastMovementFromHead = current.IsForwardMovement;
                 GridManager.Instance.SetNodeState(current.Position, false);
             }
 
-            if (!previousTrainCarMovementController)
-            {
-                var tailRotation =
-                    CalculateRotation(transform.position, nextTrainCarMovementController.transform.position);
-                transform.DORotateQuaternion(tailRotation, 0.05f);
-            }
+            AdjustFinalRotation(lastMovementFromHead);
 
             _isProcessingMovement = false;
+        }
+
+        private IEnumerator PerformMovement(Vector3 targetPosition, Quaternion targetRotation)
+        {
+            var distanceToTarget = Vector3.Distance(transform.position, targetPosition);
+            var journeyTime = distanceToTarget / speed;
+            var elapsedTime = 0f;
+            Vector3 startPos = transform.position;
+            Quaternion startRot = transform.rotation;
+
+            while (elapsedTime < journeyTime)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsedTime / journeyTime);
+
+                transform.position = Vector3.Lerp(startPos, targetPosition, t);
+                transform.rotation = Quaternion.Slerp(startRot, targetRotation, t);
+
+                yield return null;
+            }
+
+            transform.position = targetPosition;
+            transform.rotation = targetRotation;
+        }
+
+        private void AdjustFinalRotation(bool lastMovementFromHead)
+        {
+            if (lastMovementFromHead)
+            {
+                if (!previousTrainCarMovementController)
+                {
+                    var tailRotation = CalculateRotation(transform.position,
+                        nextTrainCarMovementController.transform.position);
+                    transform.DORotateQuaternion(tailRotation, 0.05f);
+                }
+            }
+            else
+            {
+                if (!nextTrainCarMovementController)
+                {
+                    var headRotation = CalculateRotation(transform.position,
+                        previousTrainCarMovementController.transform.position);
+                    headRotation *= Quaternion.Euler(0, 180, 0);
+                    transform.DORotateQuaternion(headRotation, 0.05f);
+                }
+            }
         }
     }
 
@@ -117,11 +141,13 @@ namespace _0_Game.Dev.Scripts.Train
     {
         public Vector3 Position;
         public Quaternion Rotation;
+        public bool IsForwardMovement;
 
-        public TrainMovement(Vector3 pos, Quaternion rot)
+        public TrainMovement(Vector3 pos, Quaternion rot, bool isForwardMovement)
         {
             Position = pos;
             Rotation = rot;
+            IsForwardMovement = isForwardMovement;
         }
     }
 

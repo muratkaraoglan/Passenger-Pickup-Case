@@ -113,6 +113,7 @@ MonoBehaviour:
   previousTrainCarMovementController: {fileID: 0}
   delayTime: 0.2
   speed: 7
+  isTail: 0
 --- !u!65 &3146443604043854995
 BoxCollider:
   m_ObjectHideFlags: 0

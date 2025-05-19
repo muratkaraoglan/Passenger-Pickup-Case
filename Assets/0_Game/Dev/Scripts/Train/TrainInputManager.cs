@@ -45,22 +45,15 @@ namespace _0_Game.Dev.Scripts.Train
                 }
             }
 
-            if (Drag)
-            {
-                HandleDragMovement();
-            }
-            else
-                MouseDownUpMovement();
-            //HandleDrag2();
+            HandleDragMovement();
 
             if (Input.GetMouseButtonUp(0))
             {
                 _selectedTrainCar = null;
                 _dragStartPosition = _dragCurrentPosition;
             }
- 
         }
-        
+
         private void HandleDragMovement()
         {
             if (Input.GetMouseButton(0) && _selectedTrainCar)
@@ -86,9 +79,10 @@ namespace _0_Game.Dev.Scripts.Train
                 {
                     foreach (var node in path)
                     {
-                        _selectedTrainCar.EnqueueTrainMovement(node.Coord.Position, Quaternion.identity);
-                        //GameObject.CreatePrimitive(PrimitiveType.Sphere).transform.position = node.Coord.Position;
+                        _selectedTrainCar.EnqueueTrainMovement(node.Coord.Position, Quaternion.identity,
+                            !_selectedTrainCar.isTail);
                     }
+                    
                     _dragStartPosition = _dragCurrentPosition;
                 }
             }
@@ -109,7 +103,8 @@ namespace _0_Game.Dev.Scripts.Train
                 {
                     foreach (var node in path)
                     {
-                        _selectedTrainCar.EnqueueTrainMovement(node.Coord.Position, Quaternion.identity);
+                        _selectedTrainCar.EnqueueTrainMovement(node.Coord.Position, Quaternion.identity,
+                            !_selectedTrainCar.isTail);
                     }
                 }
 
@@ -125,6 +120,5 @@ namespace _0_Game.Dev.Scripts.Train
                 Mathf.Round(position.z / cellSize) * cellSize
             );
         }
-
     }
 }
