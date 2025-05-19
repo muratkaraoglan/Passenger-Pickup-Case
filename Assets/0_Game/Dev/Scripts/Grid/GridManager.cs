@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using _0_Game.Dev.Scripts.Helper;
@@ -12,6 +13,10 @@ namespace _0_Game.Dev.Scripts.Grid
     {
         public LevelConfig levelConfig;
         [SerializeField] private TrainSpawner trainSpawner;
+        [SerializeField] private Camera mainCamera;
+        [SerializeField] private float padding = .5f;
+        [SerializeField] private Transform environmentGradientTop;
+        [SerializeField] private Transform environmentGradientBottom;
         private Dictionary<Vector3, NodeBase> _grid;
         private int _gridXOffset;
         private int _gridZOffset;
@@ -39,6 +44,49 @@ namespace _0_Game.Dev.Scripts.Grid
             }
 
             trainSpawner.SpawnTrains(levelConfig.trains, levelConfig.width, levelConfig.height);
+            AdjustCameraToGrıd();
+        }
+
+        private void AdjustCameraToGrıd()
+        {
+            float screenAspectRatio = (float)Screen.width / (float)Screen.height;
+
+            float totalWidth = levelConfig.width;
+            float totalHeight = levelConfig.height;
+
+            var sizeBasedOnWidth = (totalWidth / screenAspectRatio) / 2f;
+
+            var sizeBaseOnHeight = totalHeight / 2f;
+
+            var finalSize = Mathf.Max(sizeBasedOnWidth, sizeBaseOnHeight) + padding;
+
+            mainCamera.orthographicSize = finalSize;
+            var cameraX = (Mathf.Abs(_gridMaxX) - Mathf.Abs(_gridMinX)) / 2f;
+            var cameraPosition = mainCamera.transform.position;
+            cameraPosition.x = cameraX;
+            mainCamera.transform.position = cameraPosition;
+            AdjustEnvironmentPosition();
+        }
+
+        private void AdjustEnvironmentPosition()
+        {
+            Vector3 topCenter = mainCamera.ViewportToWorldPoint(new Vector3(.5f, 1f, mainCamera.nearClipPlane));
+            Vector3 bottomCenter = mainCamera.ViewportToWorldPoint(new Vector3(.5f, 0f, mainCamera.nearClipPlane));
+            var fwd = mainCamera.transform.forward;
+
+            Adjust(topCenter, environmentGradientTop);
+            Adjust(bottomCenter, environmentGradientBottom);
+            return;
+
+            void Adjust(Vector3 center, Transform environment)
+            {
+                if (Physics.Raycast(center, fwd, out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+                {
+                    var pos = hit.point;
+                    pos.y = 0;
+                    environment.position = pos;
+                }
+            }
         }
 
         public List<NodeBase> TryFindPath(Vector3 start, Vector3 end)

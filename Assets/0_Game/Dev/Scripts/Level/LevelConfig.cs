@@ -14,7 +14,6 @@ namespace _0_Game.Dev.Scripts.Level
         public int height;
         public Cell[] cells;
         public List<TrainHolder> trains;
-
         [SerializeField] private GameObject cellPrefab;
         [SerializeField] private GameObject obstaclePrefab;
         [SerializeField] private GameObject wallPrefab;
