@@ -103,4 +103,4 @@ MonoBehaviour:
   nextTrainCarMovementController: {fileID: 0}
   previousTrainCarMovementController: {fileID: 0}
   delayTime: 0.2
-  speed: 5
+  speed: 7

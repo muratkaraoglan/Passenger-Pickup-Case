@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 761bc611e5fa465b9d9127c3eb85152e, type: 3}
   m_Name: LevelConfig 1
   m_EditorClassIdentifier: 
-  width: 5
-  height: 8
+  width: 7
+  height: 7
   cells:
-  - type: 0
+  - type: 1
     coord: {x: 0, y: 0}
-    isOccupied: 0
+    isOccupied: 1
   - type: 0
     coord: {x: 1, y: 0}
     isOccupied: 0
@@ -31,8 +31,14 @@ MonoBehaviour:
     coord: {x: 4, y: 0}
     isOccupied: 0
   - type: 0
-    coord: {x: 0, y: 1}
+    coord: {x: 5, y: 0}
     isOccupied: 0
+  - type: 1
+    coord: {x: 6, y: 0}
+    isOccupied: 1
+  - type: 1
+    coord: {x: 0, y: 1}
+    isOccupied: 1
   - type: 0
     coord: {x: 1, y: 1}
     isOccupied: 0
@@ -41,13 +47,19 @@ MonoBehaviour:
     isOccupied: 1
   - type: 0
     coord: {x: 3, y: 1}
-    isOccupied: 0
+    isOccupied: 1
   - type: 0
     coord: {x: 4, y: 1}
     isOccupied: 0
   - type: 0
-    coord: {x: 0, y: 2}
+    coord: {x: 5, y: 1}
     isOccupied: 0
+  - type: 1
+    coord: {x: 6, y: 1}
+    isOccupied: 1
+  - type: 1
+    coord: {x: 0, y: 2}
+    isOccupied: 1
   - type: 0
     coord: {x: 1, y: 2}
     isOccupied: 0
@@ -56,46 +68,64 @@ MonoBehaviour:
     isOccupied: 1
   - type: 0
     coord: {x: 3, y: 2}
-    isOccupied: 0
+    isOccupied: 1
   - type: 0
     coord: {x: 4, y: 2}
     isOccupied: 0
   - type: 0
-    coord: {x: 0, y: 3}
+    coord: {x: 5, y: 2}
     isOccupied: 0
+  - type: 1
+    coord: {x: 6, y: 2}
+    isOccupied: 1
+  - type: 1
+    coord: {x: 0, y: 3}
+    isOccupied: 1
   - type: 0
     coord: {x: 1, y: 3}
     isOccupied: 0
   - type: 0
     coord: {x: 2, y: 3}
-    isOccupied: 1
-  - type: 0
-    coord: {x: 3, y: 3}
     isOccupied: 0
+  - type: 1
+    coord: {x: 3, y: 3}
+    isOccupied: 1
   - type: 0
     coord: {x: 4, y: 3}
     isOccupied: 0
   - type: 0
-    coord: {x: 0, y: 4}
+    coord: {x: 5, y: 3}
     isOccupied: 0
+  - type: 1
+    coord: {x: 6, y: 3}
+    isOccupied: 1
+  - type: 1
+    coord: {x: 0, y: 4}
+    isOccupied: 1
   - type: 0
     coord: {x: 1, y: 4}
     isOccupied: 0
-  - type: 0
+  - type: 1
     coord: {x: 2, y: 4}
-    isOccupied: 0
+    isOccupied: 1
   - type: 0
     coord: {x: 3, y: 4}
     isOccupied: 0
-  - type: 0
+  - type: 1
     coord: {x: 4, y: 4}
-    isOccupied: 0
+    isOccupied: 1
   - type: 0
+    coord: {x: 5, y: 4}
+    isOccupied: 0
+  - type: 1
+    coord: {x: 6, y: 4}
+    isOccupied: 1
+  - type: 1
     coord: {x: 0, y: 5}
-    isOccupied: 0
-  - type: 0
+    isOccupied: 1
+  - type: 1
     coord: {x: 1, y: 5}
-    isOccupied: 0
+    isOccupied: 1
   - type: 0
     coord: {x: 2, y: 5}
     isOccupied: 0
@@ -105,9 +135,15 @@ MonoBehaviour:
   - type: 0
     coord: {x: 4, y: 5}
     isOccupied: 0
-  - type: 0
+  - type: 1
+    coord: {x: 5, y: 5}
+    isOccupied: 1
+  - type: 1
+    coord: {x: 6, y: 5}
+    isOccupied: 1
+  - type: 1
     coord: {x: 0, y: 6}
-    isOccupied: 0
+    isOccupied: 1
   - type: 0
     coord: {x: 1, y: 6}
     isOccupied: 0
@@ -121,25 +157,15 @@ MonoBehaviour:
     coord: {x: 4, y: 6}
     isOccupied: 0
   - type: 0
-    coord: {x: 0, y: 7}
+    coord: {x: 5, y: 6}
     isOccupied: 0
-  - type: 0
-    coord: {x: 1, y: 7}
-    isOccupied: 0
-  - type: 0
-    coord: {x: 2, y: 7}
-    isOccupied: 0
-  - type: 0
-    coord: {x: 3, y: 7}
-    isOccupied: 0
-  - type: 0
-    coord: {x: 4, y: 7}
-    isOccupied: 0
+  - type: 1
+    coord: {x: 6, y: 6}
+    isOccupied: 1
   trains:
   - trainColor: 0
     headDirection: 0
     wagons:
-    - coord: {x: 2, y: 3}
     - coord: {x: 2, y: 2}
     - coord: {x: 2, y: 1}
     - coord: {x: 2, y: 0}
@@ -153,3 +179,5 @@ MonoBehaviour:
     type: 3}
   wallOffset: 0.6
   innerEdgeOffset: 0.4
+  spriteRenderer: {fileID: 8632815182976248809, guid: ba9c9e4ce4153914c858613450d0acd5,
+    type: 3}

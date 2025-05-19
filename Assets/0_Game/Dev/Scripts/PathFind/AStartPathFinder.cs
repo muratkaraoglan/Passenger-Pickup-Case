@@ -11,15 +11,18 @@ namespace _0_Game.Dev.Scripts.PathFind
         public static List<NodeBase> FindPath(NodeBase startNode, NodeBase targetNode)
         {
             var toSearch = new List<NodeBase>() { startNode };
-            var processed = new List<NodeBase>();
-
-            //if (startNode.IsEmpty) return null;
+            var processed = new HashSet<NodeBase>();
+            
+            startNode.ChangeSpriteColor();
+            startNode.SetG(0);
+            startNode.SetH(startNode.GetDistance(targetNode));
+            startNode.SetConnection(null);
 
             while (toSearch.Any())
             {
                 var current = toSearch[0];
                 foreach (var t in toSearch)
-                    if (t.F < current.F || Mathf.Approximately(t.F, current.F) && t.H < current.H)
+                    if (t.F < current.F || (Mathf.Approximately(t.F, current.F) && t.H < current.H))
                         current = t;
 
                 processed.Add(current);
@@ -29,25 +32,25 @@ namespace _0_Game.Dev.Scripts.PathFind
                 {
                     var currentPathTile = targetNode;
                     var path = new List<NodeBase>();
-                    var count = 100;
+                    var count = 100; 
 
                     while (currentPathTile != startNode)
                     {
                         path.Add(currentPathTile);
                         currentPathTile = currentPathTile.Connection;
                         count--;
-                        if (count < 0) throw new Exception();
+                        if (count < 0) throw new Exception("Path reconstruction exceeded safety limit");
                     }
+
                     path.Reverse();
                     Debug.Log("Path Count: " + path.Count);
                     return path;
                 }
 
-                foreach (var neighbor in current.Neighbors.Where(t => t.IsEmpty && !processed.Contains(t)))
+                foreach (var neighbor in current.Neighbors.Where(t => t is { IsEmpty: true } && !processed.Contains(t)))
                 {
-                    var inSearch = toSearch.Contains(neighbor);
-
                     var costToNeighbor = current.G + current.GetDistance(neighbor);
+                    var inSearch = toSearch.Contains(neighbor);
 
                     if (!inSearch || costToNeighbor < neighbor.G)
                     {
@@ -62,8 +65,8 @@ namespace _0_Game.Dev.Scripts.PathFind
                     }
                 }
             }
-
-            return new List<NodeBase>();
+            Debug.Log("No path found");
+            return new List<NodeBase>(); 
         }
     }
 }

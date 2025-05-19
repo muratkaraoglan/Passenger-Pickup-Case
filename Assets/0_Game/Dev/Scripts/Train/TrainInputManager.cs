@@ -2,24 +2,25 @@ using System;
 using System.Collections.Generic;
 using _0_Game.Dev.Scripts.Grid;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _0_Game.Dev.Scripts.Train
 {
     public class TrainInputManager : MonoBehaviour
     {
-        [SerializeField] private float gridSize = 1f;
+        [SerializeField] private float cellSize = 1f;
         [SerializeField] private float inputThresholdSqr = 100f;
         [SerializeField] private float pathPreviewFrequency = 0.2f; // How often to update path preview while dragging
 
         private Vector3 _direction;
-        private Vector3 _dragStartPosition;
-        private Vector3 _dragCurrentPosition;
+        [SerializeField] private Vector3 _dragStartPosition;
+        [SerializeField] private Vector3 _dragCurrentPosition;
         private TrainCarMovementController _selectedTrainCar;
         private Camera _mainCamera;
         private bool _isDragging;
         private float _lastPathUpdateTime;
-        private List<NodeBase> _currentPath = new List<NodeBase>();
 
+        public bool Drag;
         private Plane _plane = new(Vector3.up, Vector3.zero);
 
         private void Start()
@@ -44,6 +45,57 @@ namespace _0_Game.Dev.Scripts.Train
                 }
             }
 
+            if (Drag)
+            {
+                HandleDragMovement();
+            }
+            else
+                MouseDownUpMovement();
+            //HandleDrag2();
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                _selectedTrainCar = null;
+                _dragStartPosition = _dragCurrentPosition;
+            }
+ 
+        }
+        
+        private void HandleDragMovement()
+        {
+            if (Input.GetMouseButton(0) && _selectedTrainCar)
+            {
+                var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+
+                if (!_plane.Raycast(ray, out var entry)) return;
+                _dragCurrentPosition = ray.GetPoint(entry);
+                _dragCurrentPosition = SnapToGrid(_dragCurrentPosition);
+
+                var sqrDistance = (_dragStartPosition - _dragCurrentPosition).sqrMagnitude;
+
+                var isValidInput = sqrDistance >= inputThresholdSqr;
+
+                if (!isValidInput) return;
+
+                _dragCurrentPosition = GridManager.Instance.ClampPosition(_dragCurrentPosition);
+
+                if (_dragStartPosition == _dragCurrentPosition) return;
+
+                var path = GridManager.Instance.TryFindPath(_dragStartPosition, _dragCurrentPosition);
+                if (path.Count > 0)
+                {
+                    foreach (var node in path)
+                    {
+                        _selectedTrainCar.EnqueueTrainMovement(node.Coord.Position, Quaternion.identity);
+                        //GameObject.CreatePrimitive(PrimitiveType.Sphere).transform.position = node.Coord.Position;
+                    }
+                    _dragStartPosition = _dragCurrentPosition;
+                }
+            }
+        }
+
+        private void MouseDownUpMovement()
+        {
             if (Input.GetMouseButtonUp(0) && _selectedTrainCar)
             {
                 var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -64,23 +116,15 @@ namespace _0_Game.Dev.Scripts.Train
                 _selectedTrainCar = null;
             }
         }
-        
+
         private Vector3 SnapToGrid(Vector3 position)
         {
             return new Vector3(
-                Mathf.Round(position.x / gridSize) * gridSize,
-                position.y,
-                Mathf.Round(position.z / gridSize) * gridSize
+                Mathf.Round(position.x / cellSize) * cellSize,
+                0,
+                Mathf.Round(position.z / cellSize) * cellSize
             );
         }
 
-        private Quaternion CalculateRotation(Vector3 from, Vector3 to)
-        {
-            if ((to - from).sqrMagnitude < 0.001f)
-                return Quaternion.identity;
-
-            Vector3 direction = (to - from).normalized;
-            return Quaternion.LookRotation(direction,Vector3.up);
-        }
     }
 }

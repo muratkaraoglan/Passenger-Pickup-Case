@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using _0_Game.Dev.Scripts.Grid;
 using _0_Game.Dev.Scripts.Train;
+using Unity.Mathematics;
 
 namespace _0_Game.Dev.Scripts.Level
 {
@@ -20,6 +21,7 @@ namespace _0_Game.Dev.Scripts.Level
         [SerializeField] private GameObject cornerWallPrefab;
         [SerializeField] private float wallOffset = .6f;
         [SerializeField] private float innerEdgeOffset = .4f;
+        public SpriteRenderer spriteRenderer;
 
         public Cell GetCell(Vector2Int coord)
         {
@@ -39,18 +41,17 @@ namespace _0_Game.Dev.Scripts.Level
                 for (int x = 0; x < width; x++)
                 {
                     var cell = cells[y * width + x];
-
+                    var worldPosition = new Vector3(startXOffset + x, 0, startYOffset + y);
                     var squareNode = new SquareNode
                     {
                         IsEmpty = !cell.isOccupied,
                         Coord = new SquareCoord()
                     };
-                    squareNode.Coord.Position = new Vector3(startXOffset + x
-                        , 0
-                        , startYOffset + y);
-
-                    grid.Add(new Vector3(startXOffset + x, 0, startYOffset + y), squareNode);
-
+                    squareNode.Coord.Position = worldPosition;
+                    squareNode.spriteRenderer =
+                        Instantiate(spriteRenderer, worldPosition + Vector3.up, quaternion.identity);
+                    squareNode.ChangeSpriteColor();
+                    grid.Add(worldPosition, squareNode);
                     var current = new Vector2Int(x, y);
                     if (cell.type == CellType.NotAvailable)
                     {

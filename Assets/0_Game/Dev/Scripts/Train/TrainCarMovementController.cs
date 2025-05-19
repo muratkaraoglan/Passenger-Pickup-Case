@@ -75,23 +75,11 @@ namespace _0_Game.Dev.Scripts.Train
             while (_trainMovementQueue.Count > 0)
             {
                 GridManager.Instance.SetNodeState(transform.position, true);
+                
                 var current = _trainMovementQueue.Dequeue();
                 var rotation =
                     CalculateRotation(transform.position, current.Position);
-                // if (!previousTrainCar)
-                // {
-                //     rotation = nextTrainCar.transform.rotation;
-                // }
 
-                //transform.DORotateQuaternion(rotation, 0.05f);
-
-                // while (Vector3.Distance(current.Position, transform.position) > .01f)
-                // {
-                //     transform.position =
-                //         Vector3.MoveTowards(transform.position, current.Position, Time.deltaTime * speed);
-                //     transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, Time.deltaTime * 100);
-                //     yield return null;
-                // }
                 float distanceToTarget = Vector3.Distance(transform.position, current.Position);
                 float journeyTime = distanceToTarget / speed;
                 float elapsedTime = 0;
