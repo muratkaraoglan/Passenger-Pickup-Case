@@ -13,7 +13,6 @@ namespace _0_Game.Dev.Scripts.PathFind
             var toSearch = new List<NodeBase>() { startNode };
             var processed = new HashSet<NodeBase>();
             
-            startNode.ChangeSpriteColor();
             startNode.SetG(0);
             startNode.SetH(startNode.GetDistance(targetNode));
             startNode.SetConnection(null);
@@ -43,7 +42,6 @@ namespace _0_Game.Dev.Scripts.PathFind
                     }
 
                     path.Reverse();
-                    Debug.Log("Path Count: " + path.Count);
                     return path;
                 }
 

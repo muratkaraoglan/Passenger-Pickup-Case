@@ -10,11 +10,10 @@ namespace _0_Game.Dev.Scripts.Train
     {
         [SerializeField] private float cellSize = 1f;
         [SerializeField] private float inputThresholdSqr = 100f;
-        [SerializeField] private float pathPreviewFrequency = 0.2f; // How often to update path preview while dragging
 
         private Vector3 _direction;
-        [SerializeField] private Vector3 _dragStartPosition;
-        [SerializeField] private Vector3 _dragCurrentPosition;
+        private Vector3 _dragStartPosition;
+        private Vector3 _dragCurrentPosition;
         private TrainCarMovementController _selectedTrainCar;
         private Camera _mainCamera;
         private bool _isDragging;
@@ -25,10 +24,19 @@ namespace _0_Game.Dev.Scripts.Train
 
         private void Start()
         {
+            Input.multiTouchEnabled = false;
+            Application.targetFrameRate = 60;
             _mainCamera = Camera.main;
         }
 
         private void Update()
+        {
+            HandleMouseDown();
+            HandleDragMovement();
+            HandeMouseUp();
+        }
+
+        private void HandleMouseDown()
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -36,21 +44,13 @@ namespace _0_Game.Dev.Scripts.Train
                 if (Physics.Raycast(ray, out RaycastHit hit))
                 {
                     var trainCar = hit.transform.GetComponent<TrainCarMovementController>();
-                    if (trainCar != null)
+                    if (trainCar != null && trainCar.canInteractWithInput)
                     {
                         _selectedTrainCar = trainCar;
                         _dragStartPosition = trainCar.transform.position;
                         _dragStartPosition = SnapToGrid(_dragStartPosition);
                     }
                 }
-            }
-
-            HandleDragMovement();
-
-            if (Input.GetMouseButtonUp(0))
-            {
-                _selectedTrainCar = null;
-                _dragStartPosition = _dragCurrentPosition;
             }
         }
 
@@ -82,9 +82,18 @@ namespace _0_Game.Dev.Scripts.Train
                         _selectedTrainCar.EnqueueTrainMovement(node.Coord.Position, Quaternion.identity,
                             !_selectedTrainCar.isTail);
                     }
-                    
+
                     _dragStartPosition = _dragCurrentPosition;
                 }
+            }
+        }
+
+        private void HandeMouseUp()
+        {
+            if (Input.GetMouseButtonUp(0))
+            {
+                _selectedTrainCar = null;
+                _dragStartPosition = _dragCurrentPosition;
             }
         }
 

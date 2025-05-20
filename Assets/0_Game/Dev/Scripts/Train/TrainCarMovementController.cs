@@ -10,6 +10,9 @@ namespace _0_Game.Dev.Scripts.Train
 {
     public class TrainCarMovementController : MonoBehaviour
     {
+        [HideInInspector] public bool isTail;
+        [HideInInspector] public bool canInteractWithInput;
+
         [SerializeField] private TrainCarMovementController nextTrainCarMovementController;
         [SerializeField] private TrainCarMovementController previousTrainCarMovementController;
         [SerializeField] private float delayTime = .2f;
@@ -18,7 +21,6 @@ namespace _0_Game.Dev.Scripts.Train
         private bool _isProcessingMovement;
         private readonly Queue<TrainMovement> _trainMovementQueue = new Queue<TrainMovement>();
         private TrainMovement _lastTrainMovement;
-        [HideInInspector] public bool isTail;
 
         private void Start()
         {
@@ -135,6 +137,8 @@ namespace _0_Game.Dev.Scripts.Train
                 }
             }
         }
+        
+        public bool IsMoving() => _isProcessingMovement;
     }
 
     public struct TrainMovement

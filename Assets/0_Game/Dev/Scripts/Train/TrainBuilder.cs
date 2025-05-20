@@ -25,18 +25,19 @@ namespace _0_Game.Dev.Scripts.Train
 
         private void Build(TrainHolder trainHolder)
         {
-            GameObject parent = new GameObject("Train " + trainHolder.trainColor);
+            var parent = new GameObject("Train " + trainHolder.trainColor);
+            parent.AddComponent<TrainManager>().trainColor = trainHolder.trainColor;
             var trainVariation =
                 TrainAndCharacterVariationManager.Instance.GetTrainAndCharacterVariationByTrainColor(trainHolder
                     .trainColor);
             var count = trainHolder.wagons.Count;
-            
+
             // spawn head
             var head = Object.Instantiate(trainVariation.trainHeadPrefab, parent.transform);
             ApplyPositionAndRotation(head.transform, trainHolder.wagons[0].coord, trainHolder.headDirection);
-           
+
             var currentMovementController = head.GetComponent<TrainCarMovementController>();
-            
+            currentMovementController.canInteractWithInput = true;
             //spawn bodies
             for (int i = 1; i < count - 1; i++)
             {
@@ -49,6 +50,7 @@ namespace _0_Game.Dev.Scripts.Train
             var tail = Object.Instantiate(trainVariation.trainTailPrefab, parent.transform);
             SetPositionAndRotation(trainHolder, count - 1, tail);
             SetConnection(currentMovementController, tail);
+            tail.GetComponent<TrainCarMovementController>().canInteractWithInput = true;
         }
 
         private void SetPositionAndRotation(TrainHolder trainHolder, int i, GameObject wagon)

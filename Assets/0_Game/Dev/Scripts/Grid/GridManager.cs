@@ -27,14 +27,7 @@ namespace _0_Game.Dev.Scripts.Grid
 
         private void Start()
         {
-            _gridXOffset = -levelConfig.width / 2;
-            _gridZOffset = -levelConfig.height / 2;
-
-            _gridMinX = _gridXOffset;
-            _gridMaxX = _gridXOffset + levelConfig.width - 1;
-
-            _gridMinZ = _gridZOffset;
-            _gridMaxZ = _gridZOffset + levelConfig.height - 1;
+            SetGridOffsets();
 
             _grid = levelConfig.InitializeGrid(transform);
 
@@ -45,6 +38,18 @@ namespace _0_Game.Dev.Scripts.Grid
 
             trainSpawner.SpawnTrains(levelConfig.trains, levelConfig.width, levelConfig.height);
             AdjustCameraToGrıd();
+        }
+
+        private void SetGridOffsets()
+        {
+            _gridXOffset = -levelConfig.width / 2;
+            _gridZOffset = -levelConfig.height / 2;
+
+            _gridMinX = _gridXOffset;
+            _gridMaxX = _gridXOffset + levelConfig.width - 1;
+
+            _gridMinZ = _gridZOffset;
+            _gridMaxZ = _gridZOffset + levelConfig.height - 1;
         }
 
         private void AdjustCameraToGrıd()
@@ -91,12 +96,8 @@ namespace _0_Game.Dev.Scripts.Grid
 
         public List<NodeBase> TryFindPath(Vector3 start, Vector3 end)
         {
-            print(start + " " + end);
             var startNode = GetNoeAtPosition(start);
             var endNode = GetNoeAtPosition(end);
-
-            print(startNode);
-            print(endNode);
 
             if (startNode != null && endNode != null)
             {
@@ -116,7 +117,6 @@ namespace _0_Game.Dev.Scripts.Grid
             if (node != null)
             {
                 node.IsEmpty = isEmpty;
-                node.ChangeSpriteColor();
             }
         }
 
