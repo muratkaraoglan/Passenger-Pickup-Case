@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 761bc611e5fa465b9d9127c3eb85152e, type: 3}
   m_Name: LevelConfig 2
   m_EditorClassIdentifier: 
-  width: 7
+  width: 5
   height: 6
   cells: []
   trains: []

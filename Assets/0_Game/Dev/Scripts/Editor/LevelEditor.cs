@@ -34,6 +34,7 @@ namespace _0_Game.Dev.Scripts.Editor
         private TrainColor _currentPassengerColor = TrainColor.Blue;
         private PassengerSide _selectedPassengerSide;
         private List<PassengerQueue> _deletedQueues = new List<PassengerQueue>();
+
         private Dictionary<PassengerSide, Dictionary<Vector2Int, Rect>> _passengerButtonRects =
             new Dictionary<PassengerSide, Dictionary<Vector2Int, Rect>>();
 
@@ -85,6 +86,7 @@ namespace _0_Game.Dev.Scripts.Editor
             {
                 sideDict.Clear();
             }
+
             _customButtonStyle = new GUIStyle(GUI.skin.button)
             {
                 fontSize = 25,
@@ -130,6 +132,7 @@ namespace _0_Game.Dev.Scripts.Editor
             DrawConnectionLines();
 
             EditorGUILayout.EndScrollView();
+
         }
 
         #region Draws
@@ -191,8 +194,11 @@ namespace _0_Game.Dev.Scripts.Editor
                 MessageType.Info);
             EditorGUILayout.HelpBox(" Click the passenger button(P) for remove passenger.",
                 MessageType.Info);
-            var topSidePassengerCount = _currentLevelConfig.passengerQueues.Where(q => q.side == PassengerSide.Top)
-                .Max(q => q.passengers.Count);
+            var topSidePassengerCount = 0;
+            var topSideQueues = _currentLevelConfig.passengerQueues.Where(q => q.side == PassengerSide.Top);
+            var passengerQueues = topSideQueues as PassengerQueue[] ?? topSideQueues.ToArray();
+            if (passengerQueues.Any())
+                topSidePassengerCount = passengerQueues.Max(q => q.passengers.Count);
 
             EditorGUILayout.Space(topSidePassengerCount * PassengerQueueOffset);
             EditorGUILayout.EndVertical();
@@ -319,6 +325,7 @@ namespace _0_Game.Dev.Scripts.Editor
             {
                 _currentLevelConfig.passengerQueues.Remove(queue);
             }
+
             _deletedQueues.Clear();
 
             GUI.backgroundColor = Color.white;
@@ -363,14 +370,14 @@ namespace _0_Game.Dev.Scripts.Editor
                 GUI.backgroundColor = Color.white;
             }
         }
-  
+
         private void OnPassengerButtonClicked(PassengerQueue queue, int index)
         {
             Debug.Log($"Button index {index} {queue.gridPosition}  {queue.side}");
             queue.RemovePassenger(index);
             if (queue.passengers.Count == 0)
             {
-               _deletedQueues.Add(queue);
+                _deletedQueues.Add(queue);
             }
         }
 
