@@ -5,6 +5,7 @@ using _0_Game.Dev.Scripts.Events;
 using _0_Game.Dev.Scripts.Helper;
 using _0_Game.Dev.Scripts.Managers;
 using _0_Game.Dev.Scripts.Train;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using DG.Tweening;
 using Unity.VisualScripting;
@@ -33,7 +34,7 @@ namespace _0_Game.Dev.Scripts.Passenger
             {
                 if (!_lastTriggeredTrainCarMovementController.IsMoving())
                 {
-                    StartCoroutine(JumpPassenger(_lastTriggeredTrainCarMovementController));
+                    JumpPassengerAsync(_lastTriggeredTrainCarMovementController).Forget();
                 }
             }
         }
@@ -47,10 +48,10 @@ namespace _0_Game.Dev.Scripts.Passenger
             _passageGateMeshRenderer.materials = materials;
         }
 
-        private IEnumerator JumpPassenger(TrainCarMovementController trainCarMovementController)
+        private async UniTask JumpPassengerAsync(TrainCarMovementController trainCarMovementController)
         {
             var manager = trainCarMovementController.GetComponentInParent<TrainManager>();
-            if (!manager.HasEmptySeatPoint()) yield break;
+            if (!manager.HasEmptySeatPoint()) return;
 
             bool isFinished = false;
             _isJumpStarted = true;
@@ -61,7 +62,7 @@ namespace _0_Game.Dev.Scripts.Passenger
                 {
                     print("not match color ");
                     _isJumpStarted = false;
-                    yield break;
+                    return;
                 }
 
                 var seatPoint = manager.GetSeatPoint();
@@ -85,7 +86,7 @@ namespace _0_Game.Dev.Scripts.Passenger
                             ChangeGateColor(controllers[0].Color);
                     }
 
-                    yield return Extension.GetWaitForSeconds(.1f);
+                    await UniTask.Delay(TimeSpan.FromSeconds(0.1f));
                 }
 
                 if (!manager.HasEmptySeatPoint())
@@ -93,7 +94,7 @@ namespace _0_Game.Dev.Scripts.Passenger
                     print("no seat");
                     _isJumpStarted = false;
                     manager.StartFullCapacityProcess();
-                    yield break;
+                    return;
                 }
             }
 

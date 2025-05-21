@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using _0_Game.Dev.Scripts.Grid;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -35,7 +36,7 @@ namespace _0_Game.Dev.Scripts.Train
 
         private void OnDisable()
         {
-            GridManager.Instance.SetNodeState(transform.position,true);
+            GridManager.Instance.SetNodeState(transform.position, true);
         }
 
         public void SetPreviousTrainCarMovementController(TrainCarMovementController preCarMovementController) =>
@@ -51,7 +52,7 @@ namespace _0_Game.Dev.Scripts.Train
 
             if (!_isProcessingMovement)
             {
-                StartCoroutine(ProcessMovements());
+                ProcessMovements().Forget();
             }
 
             var controller = isForwardMovement ? previousTrainCarMovementController : nextTrainCarMovementController;
@@ -72,7 +73,7 @@ namespace _0_Game.Dev.Scripts.Train
             return Quaternion.LookRotation(direction, Vector3.up);
         }
 
-        private IEnumerator ProcessMovements()
+        private async UniTask ProcessMovements()
         {
             _isProcessingMovement = true;
             bool lastMovementFromHead = _lastTrainMovement.IsForwardMovement;
@@ -86,7 +87,7 @@ namespace _0_Game.Dev.Scripts.Train
                 var rotation = CalculateRotation(transform.position, current.Position);
                 rotation = current.IsForwardMovement ? rotation : rotation * Quaternion.Euler(0, 180, 0);
 
-                yield return PerformMovement(current.Position, rotation);
+                await PerformMovement(current.Position, rotation);
 
                 lastMovementFromHead = current.IsForwardMovement;
                 GridManager.Instance.SetNodeState(current.Position, false);
@@ -97,7 +98,7 @@ namespace _0_Game.Dev.Scripts.Train
             _isProcessingMovement = false;
         }
 
-        private IEnumerator PerformMovement(Vector3 targetPosition, Quaternion targetRotation)
+        private async UniTask PerformMovement(Vector3 targetPosition, Quaternion targetRotation)
         {
             var distanceToTarget = Vector3.Distance(transform.position, targetPosition);
             var journeyTime = distanceToTarget / speed;
@@ -113,7 +114,7 @@ namespace _0_Game.Dev.Scripts.Train
                 transform.position = Vector3.Lerp(startPos, targetPosition, t);
                 transform.rotation = Quaternion.Slerp(startRot, targetRotation, t);
 
-                yield return null;
+                await UniTask.Yield(); // yerine UniTask.NextFrame() da kullanılabilir
             }
 
             transform.position = targetPosition;
@@ -142,7 +143,7 @@ namespace _0_Game.Dev.Scripts.Train
                 }
             }
         }
-        
+
         public bool IsMoving() => _isProcessingMovement;
     }
 
