@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using _0_Game.Dev.Scripts.Helper;
 using _0_Game.Dev.Scripts.Level;
+using _0_Game.Dev.Scripts.Passenger;
 using _0_Game.Dev.Scripts.PathFind;
 using _0_Game.Dev.Scripts.Train;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace _0_Game.Dev.Scripts.Grid
     {
         public LevelConfig levelConfig;
         [SerializeField] private TrainSpawner trainSpawner;
+        [SerializeField] private PassageSpawner passageSpawner;
         [SerializeField] private Camera mainCamera;
         [SerializeField] private float padding = .5f;
         [SerializeField] private Transform environmentGradientTop;
@@ -37,6 +39,7 @@ namespace _0_Game.Dev.Scripts.Grid
             }
 
             trainSpawner.SpawnTrains(levelConfig.trains, levelConfig.width, levelConfig.height);
+            passageSpawner.SpawnPassages(_gridXOffset, _gridZOffset, levelConfig.passengerQueues);
             AdjustCameraToGrıd();
         }
 

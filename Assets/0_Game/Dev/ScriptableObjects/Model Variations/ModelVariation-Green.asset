@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73531aef6d12479b820e46461c6dc82e, type: 3}
-  m_Name: TrainAndCharacterVariation-Green
+  m_Name: ModelVariation-Green
   m_EditorClassIdentifier: 
   trainColor: 1
   trainHeadPrefab: {fileID: 8453651822760650080, guid: 4150ba50bb18ad0448942e3910874efb,
@@ -19,4 +19,6 @@ MonoBehaviour:
     type: 3}
   trainTailPrefab: {fileID: 4429683031239927148, guid: 227b93c6484b9b743926e12459b2af4e,
     type: 3}
-  characterPrefab: {fileID: 0}
+  characterPrefab: {fileID: 4747229773472387242, guid: 957128748a0a91a448ffe71c63bd1dea,
+    type: 3}
+  material: {fileID: 2100000, guid: 442731f0d75ce96469ea9167a8d591c9, type: 2}

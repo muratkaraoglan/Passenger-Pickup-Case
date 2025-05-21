@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73531aef6d12479b820e46461c6dc82e, type: 3}
-  m_Name: TrainAndCharacterVariation-Orange
+  m_Name: ModelVariation-Purple
   m_EditorClassIdentifier: 
-  trainColor: 2
-  trainHeadPrefab: {fileID: 1347119206216484665, guid: 6eec876835a99524b92f04f77138908c,
+  trainColor: 3
+  trainHeadPrefab: {fileID: 1916770231450327008, guid: 9489bb6bd8c243a429ffeb96ebc7fc37,
     type: 3}
-  trainBodyPrefab: {fileID: 7624690258670278376, guid: b710c0a653b2204419d1b02b8c422ed3,
+  trainBodyPrefab: {fileID: 6813961357940572011, guid: ff43e88f47fc7314da839aaece43b5a6,
     type: 3}
-  trainTailPrefab: {fileID: 5664656869609494318, guid: da80a71a35482d44495c5161b014f321,
+  trainTailPrefab: {fileID: 84291420952853757, guid: e548d87629914534aa05c773378fe581,
     type: 3}
   characterPrefab: {fileID: 0}

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73531aef6d12479b820e46461c6dc82e, type: 3}
-  m_Name: TrainAndCharacterVariation-Blue
+  m_Name: ModelVariation-Blue
   m_EditorClassIdentifier: 
   trainColor: 0
   trainHeadPrefab: {fileID: 663466306907251779, guid: dc8b9650836f9bb49ad2d8b860c99445,
@@ -19,4 +19,8 @@ MonoBehaviour:
     type: 3}
   trainTailPrefab: {fileID: 3127324681207609127, guid: 2e3e40dea58e4ac42bf8bf312160730a,
     type: 3}
-  characterPrefab: {fileID: 0}
+  characterPrefab: {fileID: -3799045617297988900, guid: 7f9dcff03a0f2cc4ab59c3d8f3adc587,
+    type: 3}
+  passagePrefab: {fileID: 5582927433772601740, guid: 4543ccfc6527a0841b4ac9dc36932f06,
+    type: 3}
+  material: {fileID: 2100000, guid: 925d7f21bebb31048b7ba6ecab728412, type: 2}

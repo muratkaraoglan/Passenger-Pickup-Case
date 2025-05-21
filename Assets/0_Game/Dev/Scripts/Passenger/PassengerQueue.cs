@@ -45,5 +45,6 @@ namespace _0_Game.Dev.Scripts.Passenger
                 passengers[i].order = i;
             }
         }
+        
     }
 }

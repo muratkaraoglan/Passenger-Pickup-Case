@@ -33,7 +33,7 @@ namespace _0_Game.Dev.Scripts.Editor
 
         private TrainColor _currentPassengerColor = TrainColor.Blue;
         private PassengerSide _selectedPassengerSide;
-
+        private List<PassengerQueue> _deletedQueues = new List<PassengerQueue>();
         private Dictionary<PassengerSide, Dictionary<Vector2Int, Rect>> _passengerButtonRects =
             new Dictionary<PassengerSide, Dictionary<Vector2Int, Rect>>();
 
@@ -309,6 +309,12 @@ namespace _0_Game.Dev.Scripts.Editor
                 DrawPassengerQueue(queue);
             }
 
+            foreach (var queue in _deletedQueues)
+            {
+                _currentLevelConfig.passengerQueues.Remove(queue);
+            }
+            _deletedQueues.Clear();
+
             GUI.backgroundColor = Color.white;
         }
 
@@ -351,11 +357,15 @@ namespace _0_Game.Dev.Scripts.Editor
                 GUI.backgroundColor = Color.white;
             }
         }
-
+  
         private void OnPassengerButtonClicked(PassengerQueue queue, int index)
         {
             Debug.Log($"Button index {index} {queue.gridPosition}  {queue.side}");
             queue.RemovePassenger(index);
+            if (queue.passengers.Count == 0)
+            {
+               _deletedQueues.Add(queue);
+            }
         }
 
         private void DrawPassengerButton(int x, int y, Rect buttonRect, int gridWidth, int gridHeight)

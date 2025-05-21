@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _0_Game.Dev.Scripts.Events;
 using _0_Game.Dev.Scripts.Grid;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -94,6 +95,7 @@ namespace _0_Game.Dev.Scripts.Train
             {
                 _selectedTrainCar = null;
                 _dragStartPosition = _dragCurrentPosition;
+                GameEventsManager.Instance.InputEvents.RaiseMouseUp();
             }
         }
 

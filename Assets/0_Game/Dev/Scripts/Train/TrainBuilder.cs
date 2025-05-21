@@ -26,9 +26,10 @@ namespace _0_Game.Dev.Scripts.Train
         private void Build(TrainHolder trainHolder)
         {
             var parent = new GameObject("Train " + trainHolder.trainColor);
-            parent.AddComponent<TrainManager>().trainColor = trainHolder.trainColor;
+            var trainManager =parent.AddComponent<TrainManager>();
+            trainManager.trainColor = trainHolder.trainColor;
             var trainVariation =
-                TrainAndCharacterVariationManager.Instance.GetTrainAndCharacterVariationByTrainColor(trainHolder
+                ModelVariationManager.Instance.GetModelVariation(trainHolder
                     .trainColor);
             var count = trainHolder.wagons.Count;
 
@@ -38,11 +39,13 @@ namespace _0_Game.Dev.Scripts.Train
 
             var currentMovementController = head.GetComponent<TrainCarMovementController>();
             currentMovementController.canInteractWithInput = true;
+            AddSeatPointToTrain(trainManager,head.GetComponent<WagonController>());
             //spawn bodies
             for (int i = 1; i < count - 1; i++)
             {
                 var wagon = Object.Instantiate(trainVariation.trainBodyPrefab, parent.transform);
                 SetPositionAndRotation(trainHolder, i, wagon);
+                AddSeatPointToTrain(trainManager,wagon.GetComponent<WagonController>());
                 currentMovementController = SetConnection(currentMovementController, wagon);
             }
 
@@ -50,6 +53,7 @@ namespace _0_Game.Dev.Scripts.Train
             var tail = Object.Instantiate(trainVariation.trainTailPrefab, parent.transform);
             SetPositionAndRotation(trainHolder, count - 1, tail);
             SetConnection(currentMovementController, tail);
+            AddSeatPointToTrain(trainManager,tail.GetComponent<WagonController>());
             tail.GetComponent<TrainCarMovementController>().canInteractWithInput = true;
         }
 
@@ -99,6 +103,14 @@ namespace _0_Game.Dev.Scripts.Train
             if (dir == Vector2Int.left) return Direction.Left;
             if (dir == Vector2Int.right) return Direction.Right;
             return Direction.Up;
+        }
+
+        private void AddSeatPointToTrain(TrainManager trainManager, WagonController wagonController)
+        {
+            foreach (var wagon in wagonController.Wagons )
+            {
+                trainManager.AddSeatPoint(wagon);
+            }
         }
     }
 }

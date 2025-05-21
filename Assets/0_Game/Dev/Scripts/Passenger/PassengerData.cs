@@ -16,8 +16,8 @@ namespace _0_Game.Dev.Scripts.Passenger
     public class Passenger
     {
         public TrainColor color;
-        public Vector2Int gridPosition; // Grid position adjacent to where passenger stands
-        public PassengerSide side; // Side of the grid where passenger stands
-        public int order; // Order in passenger queue (0 is first)
+        public Vector2Int gridPosition;
+        public PassengerSide side; 
+        public int order;
     }
 }
