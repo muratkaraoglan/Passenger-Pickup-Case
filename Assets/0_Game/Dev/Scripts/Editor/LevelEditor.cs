@@ -4,6 +4,7 @@ using System.Linq;
 using _0_Game.Dev.Scripts.Grid;
 using _0_Game.Dev.Scripts.Level;
 using _0_Game.Dev.Scripts.Train;
+using _0_Game.Dev.Scripts.Passenger;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +29,16 @@ namespace _0_Game.Dev.Scripts.Editor
         private Dictionary<Vector2Int, Rect> _buttonRects = new Dictionary<Vector2Int, Rect>();
         private GUIStyle _customButtonStyle;
 
+        #region PassengerMode
+
+        private TrainColor _currentPassengerColor = TrainColor.Blue;
+        private PassengerSide _selectedPassengerSide;
+
+        private Dictionary<PassengerSide, Dictionary<Vector2Int, Rect>> _passengerButtonRects =
+            new Dictionary<PassengerSide, Dictionary<Vector2Int, Rect>>();
+
+        #endregion
+
         #region LevelEditorMode
 
         private LevelEditorModeType _levelEditorCurrentMode = 0;
@@ -43,7 +54,9 @@ namespace _0_Game.Dev.Scripts.Editor
         private const float OffsetBottom = 55f;
         private const float OffsetSideLeft = 25f;
         private const float OffsetSideRight = 55f;
-        private const float PassengerButtonSize = 20f;
+        private const float PassengerButtonHeight = 20f;
+        private const float PassengerButtonWidth = 30f;
+        private const float PassengerQueueOffset = 20f;
 
         #endregion
 
@@ -54,6 +67,12 @@ namespace _0_Game.Dev.Scripts.Editor
             var window = GetWindow<LevelEditor>();
             window.titleContent = new GUIContent("Level Editor");
             window.Show();
+
+            window._passengerButtonRects.Clear();
+            foreach (PassengerSide side in Enum.GetValues(typeof(PassengerSide)))
+            {
+                window._passengerButtonRects[side] = new Dictionary<Vector2Int, Rect>();
+            }
         }
 
         private readonly string _errorMsg = "Make sure at least 2 train placed.";
@@ -93,6 +112,10 @@ namespace _0_Game.Dev.Scripts.Editor
             else if (_levelEditorCurrentMode == LevelEditorModeType.TrainMode)
             {
                 DrawTrainMode();
+            }
+            else if (_levelEditorCurrentMode == LevelEditorModeType.PassengerMode)
+            {
+                DrawPassengerMode();
             }
 
             EditorGUILayout.EndHorizontal();
@@ -142,13 +165,30 @@ namespace _0_Game.Dev.Scripts.Editor
                     {
                         _currentLevelConfig.GetCell(wagon.coord).isOccupied = true;
                     }
-                    
+
                     _currentTrainHolder = null;
                     _levelEditorCurrentMode = LevelEditorModeType.GridMode;
                 }
             }
 
+            EditorGUILayout.LabelField("Instructions:", EditorStyles.boldLabel);
             EditorGUILayout.HelpBox(_errorMsg, MessageType.Info, true);
+            EditorGUILayout.EndVertical();
+        }
+
+        private void DrawPassengerMode()
+        {
+            EditorGUILayout.BeginVertical();
+            _currentPassengerColor = (TrainColor)EditorGUILayout.EnumPopup("Passenger Color", _currentPassengerColor);
+            EditorGUILayout.LabelField("Instructions:", EditorStyles.boldLabel);
+            EditorGUILayout.HelpBox("Click on an edge button (T, B, L, R) to place a passenger at that position.",
+                MessageType.Info);
+            EditorGUILayout.HelpBox(" Click the passenger button(P) for remove passenger.",
+                MessageType.Info);
+            var topSidePassengerCount = _currentLevelConfig.passengerQueues.Where(q => q.side == PassengerSide.Top)
+                .Max(q => q.passengers.Count);
+
+            EditorGUILayout.Space(topSidePassengerCount * PassengerQueueOffset);
             EditorGUILayout.EndVertical();
         }
 
@@ -175,6 +215,12 @@ namespace _0_Game.Dev.Scripts.Editor
         private void DrawGrid()
         {
             _buttonRects.Clear();
+
+            foreach (var sideDict in _passengerButtonRects.Values)
+            {
+                sideDict.Clear();
+            }
+
             if (_currentLevelConfig.cells.Length == 0)
                 _currentLevelConfig.cells = new Cell[_currentLevelConfig.width * _currentLevelConfig.height];
 
@@ -226,9 +272,18 @@ namespace _0_Game.Dev.Scripts.Editor
                         }
                     }
 
-                    if (GUI.Button(buttonRect, buttonText, _customButtonStyle))
+                    var cell = _currentLevelConfig.GetCell(coordinates);
+
+                    if (cell.type == CellType.NotAvailable &&
+                        _levelEditorCurrentMode == LevelEditorModeType.PassengerMode)
                     {
-                        OnCellClicked(coordinates);
+                    }
+                    else
+                    {
+                        if (GUI.Button(buttonRect, buttonText, _customButtonStyle))
+                        {
+                            OnCellClicked(coordinates);
+                        }
                     }
 
                     if (_levelEditorCurrentMode == LevelEditorModeType.PassengerMode)
@@ -245,42 +300,191 @@ namespace _0_Game.Dev.Scripts.Editor
                 EditorGUILayout.EndHorizontal();
             }
 
+            if (Event.current.type == EventType.Repaint)
+            {
+            }
+
+            foreach (var queue in _currentLevelConfig.passengerQueues)
+            {
+                DrawPassengerQueue(queue);
+            }
+
             GUI.backgroundColor = Color.white;
+        }
+
+        private void DrawPassengerQueue(PassengerQueue queue)
+        {
+            if (!_passengerButtonRects.ContainsKey(queue.side) ||
+                !_passengerButtonRects[queue.side].ContainsKey(queue.gridPosition))
+                return;
+
+            Rect baseRect = _passengerButtonRects[queue.side][queue.gridPosition];
+
+            Vector2 queueDirection = queue.side switch
+            {
+                PassengerSide.Top => new Vector2(0, -1),
+                PassengerSide.Bottom => new Vector2(0, 1),
+                PassengerSide.Left => new Vector2(-1, 0),
+                PassengerSide.Right => new Vector2(1, 0),
+                _ => Vector2.zero
+            };
+
+            for (int i = 0; i < queue.passengers.Count; i++)
+            {
+                var passenger = queue.passengers[i];
+                float offset = (i + 1) * PassengerQueueOffset;
+
+                Rect passengerRect = new Rect(
+                    baseRect.x + queueDirection.x * offset,
+                    baseRect.y + queueDirection.y * offset,
+                    baseRect.width,
+                    baseRect.height
+                );
+
+                GUI.backgroundColor = GetColorForTrain(passenger.color);
+                if (GUI.Button(passengerRect, "P"))
+                {
+                    OnPassengerButtonClicked(queue, i);
+                }
+
+                //GUI.Box(passengerRect, $"P{i + 1}");
+                GUI.backgroundColor = Color.white;
+            }
+        }
+
+        private void OnPassengerButtonClicked(PassengerQueue queue, int index)
+        {
+            Debug.Log($"Button index {index} {queue.gridPosition}  {queue.side}");
+            queue.RemovePassenger(index);
         }
 
         private void DrawPassengerButton(int x, int y, Rect buttonRect, int gridWidth, int gridHeight)
         {
-            if (y == gridHeight - 1) // Bottom edge
+            Vector2Int gridPos = new Vector2Int(x, y);
+            var cell = _currentLevelConfig.GetCell(new Vector2Int(x, y));
+            if (cell != null && cell.type == CellType.Obstacle)
             {
-                var rect = new Rect(buttonRect.x, buttonRect.y - OffsetTop, buttonRect.width, PassengerButtonSize);
-                TryDrawButton(rect, "T");
+                return;
             }
-            else if (y == 0) // Top edge
+
+            if (cell.type == CellType.NotAvailable)
             {
-                var rect = new Rect(buttonRect.x, buttonRect.y + OffsetBottom, buttonRect.width, PassengerButtonSize);
-                TryDrawButton(rect, "B");
+                // var leftCell = _currentLevelConfig.GetCell(new Vector2Int(x - 1, y));
+                //
+                // if (leftCell is { type: CellType.Empty })
+                // {
+                //     var rect = new Rect(buttonRect.x, buttonRect.y + PassengerButtonHeight / 3 + 10,
+                //         PassengerButtonHeight,
+                //         PassengerButtonWidth - 10);
+                //     DrawPassengerInSideButton(rect, "R", Direction.Left);
+                // }
+                //
+                // var rightCell = _currentLevelConfig.GetCell(new Vector2Int(x + 1, y));
+                //
+                // if (rightCell is { type: CellType.Empty })
+                // {
+                //     var rect = new Rect(buttonRect.x + buttonRect.width - 15,
+                //         buttonRect.y + PassengerButtonHeight / 3 + 10,
+                //         PassengerButtonHeight,
+                //         PassengerButtonWidth - 10);
+                //     DrawPassengerInSideButton(rect, "L", Direction.Right);
+                // }
+                //
+                // var topCell = _currentLevelConfig.GetCell(new Vector2Int(x, y + 1));
+                //
+                // if (topCell is { type: CellType.Empty })
+                // {
+                //     var rect = new Rect(buttonRect.x + PassengerButtonWidth / 3 + 10, buttonRect.y,
+                //         PassengerButtonWidth - 10,
+                //         PassengerButtonHeight);
+                //     DrawPassengerInSideButton(rect, "B", Direction.Up);
+                // }
+                //
+                // var bottomCell = _currentLevelConfig.GetCell(new Vector2Int(x, y - 1));
+                // if (bottomCell is { type: CellType.Empty })
+                // {
+                //     var rect = new Rect(buttonRect.x + PassengerButtonWidth / 3 + 10, buttonRect.y + OffsetTop + 10,
+                //         PassengerButtonWidth - 10,
+                //         PassengerButtonHeight);
+                //     DrawPassengerInSideButton(rect, "T", Direction.Down);
+                // }
+            }
+
+            if (cell.type == CellType.NotAvailable)
+            {
+                return;
+            }
+
+            if (y == gridHeight - 1) // Top
+            {
+                var rect = new Rect(buttonRect.x + PassengerButtonWidth / 3, buttonRect.y - OffsetTop,
+                    PassengerButtonWidth,
+                    PassengerButtonHeight);
+                _passengerButtonRects[PassengerSide.Top][gridPos] = rect;
+                TryDrawPassengerButton(rect, "T", gridPos, PassengerSide.Top);
+            }
+            else if (y == 0) // Bottom
+            {
+                var rect = new Rect(buttonRect.x + PassengerButtonWidth / 3, buttonRect.y + OffsetBottom,
+                    PassengerButtonWidth, PassengerButtonHeight);
+                _passengerButtonRects[PassengerSide.Bottom][gridPos] = rect;
+                TryDrawPassengerButton(rect, "B", gridPos, PassengerSide.Bottom);
             }
 
             if (x == gridWidth - 1) // Right edge
             {
-                var rect = new Rect(buttonRect.x + OffsetSideRight, buttonRect.y, PassengerButtonSize,
-                    buttonRect.height);
-                TryDrawButton(rect, "R");
+                var rect = new Rect(buttonRect.x + OffsetSideRight, buttonRect.y + PassengerButtonHeight / 3,
+                    PassengerButtonHeight,
+                    PassengerButtonWidth);
+                _passengerButtonRects[PassengerSide.Right][gridPos] = rect;
+                TryDrawPassengerButton(rect, "R", gridPos, PassengerSide.Right);
             }
             else if (x == 0) // Left edge
             {
-                var rect = new Rect(buttonRect.x - OffsetSideLeft, buttonRect.y, PassengerButtonSize,
-                    buttonRect.height);
-                TryDrawButton(rect, "L");
+                var rect = new Rect(buttonRect.x - OffsetSideLeft, buttonRect.y + PassengerButtonHeight / 3,
+                    PassengerButtonHeight,
+                    PassengerButtonWidth);
+                _passengerButtonRects[PassengerSide.Left][gridPos] = rect;
+                TryDrawPassengerButton(rect, "L", gridPos, PassengerSide.Left);
             }
         }
 
-        private void TryDrawButton(Rect rect, string label)
+        private void TryDrawPassengerButton(Rect rect, string label, Vector2Int gridPos, PassengerSide side)
         {
             GUI.backgroundColor = Color.white;
             if (GUI.Button(rect, label))
             {
-                Debug.Log($"Button {label} clicked at {rect}");
+                Debug.Log($"Button {label} clicked at {rect}  {side}");
+                OnPassengerButtonClicked(gridPos, side);
+            }
+        }
+
+        private void OnPassengerButtonClicked(Vector2Int gridPos, PassengerSide side)
+        {
+            PassengerQueue existingQueue = _currentLevelConfig.GetPassengerQueueAtPosition(gridPos, side);
+
+            if (existingQueue != null)
+            {
+                existingQueue.AddPassenger(_currentPassengerColor);
+            }
+            else
+            {
+                var newQueue = new PassengerQueue()
+                {
+                    gridPosition = gridPos,
+                    side = side
+                };
+                newQueue.AddPassenger(_currentPassengerColor);
+                _currentLevelConfig.passengerQueues.Add(newQueue);
+            }
+        }
+
+        private void DrawPassengerInSideButton(Rect rect, string label, Direction direction)
+        {
+            GUI.backgroundColor = Color.white;
+            if (GUI.Button(rect, label))
+            {
+                Debug.Log($"Button {label} clicked at {rect}  {direction}");
             }
         }
 

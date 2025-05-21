@@ -50,10 +50,10 @@ MonoBehaviour:
     isOccupied: 0
   - type: 0
     coord: {x: 1, y: 2}
-    isOccupied: 0
+    isOccupied: 1
   - type: 0
     coord: {x: 2, y: 2}
-    isOccupied: 0
+    isOccupied: 1
   - type: 0
     coord: {x: 3, y: 2}
     isOccupied: 0
@@ -65,28 +65,28 @@ MonoBehaviour:
     isOccupied: 0
   - type: 0
     coord: {x: 1, y: 3}
-    isOccupied: 0
-  - type: 0
+    isOccupied: 1
+  - type: 2
     coord: {x: 2, y: 3}
-    isOccupied: 0
-  - type: 0
+    isOccupied: 1
+  - type: 2
     coord: {x: 3, y: 3}
-    isOccupied: 0
+    isOccupied: 1
   - type: 0
     coord: {x: 4, y: 3}
     isOccupied: 0
   - type: 0
     coord: {x: 0, y: 4}
     isOccupied: 0
-  - type: 1
+  - type: 0
     coord: {x: 1, y: 4}
     isOccupied: 1
-  - type: 0
+  - type: 2
     coord: {x: 2, y: 4}
-    isOccupied: 0
-  - type: 1
-    coord: {x: 3, y: 4}
     isOccupied: 1
+  - type: 0
+    coord: {x: 3, y: 4}
+    isOccupied: 0
   - type: 0
     coord: {x: 4, y: 4}
     isOccupied: 0
@@ -96,9 +96,9 @@ MonoBehaviour:
   - type: 0
     coord: {x: 1, y: 5}
     isOccupied: 0
-  - type: 0
+  - type: 2
     coord: {x: 2, y: 5}
-    isOccupied: 0
+    isOccupied: 1
   - type: 0
     coord: {x: 3, y: 5}
     isOccupied: 0
@@ -111,16 +111,97 @@ MonoBehaviour:
   - type: 0
     coord: {x: 1, y: 6}
     isOccupied: 0
-  - type: 0
+  - type: 2
     coord: {x: 2, y: 6}
-    isOccupied: 0
+    isOccupied: 1
   - type: 0
     coord: {x: 3, y: 6}
     isOccupied: 0
   - type: 0
     coord: {x: 4, y: 6}
     isOccupied: 0
-  trains: []
+  trains:
+  - trainColor: 0
+    headDirection: 0
+    wagons:
+    - coord: {x: 1, y: 4}
+    - coord: {x: 1, y: 3}
+    - coord: {x: 1, y: 2}
+    - coord: {x: 2, y: 2}
+  passengerQueues:
+  - passengers:
+    - color: 0
+      gridPosition: {x: 0, y: 6}
+      side: 2
+      order: 0
+    - color: 0
+      gridPosition: {x: 0, y: 6}
+      side: 2
+      order: 1
+    - color: 0
+      gridPosition: {x: 0, y: 6}
+      side: 2
+      order: 2
+    - color: 0
+      gridPosition: {x: 0, y: 6}
+      side: 2
+      order: 3
+    - color: 0
+      gridPosition: {x: 0, y: 6}
+      side: 2
+      order: 4
+    - color: 0
+      gridPosition: {x: 0, y: 6}
+      side: 2
+      order: 5
+    gridPosition: {x: 0, y: 6}
+    side: 2
+  - passengers:
+    - color: 0
+      gridPosition: {x: 1, y: 0}
+      side: 1
+      order: 0
+    - color: 0
+      gridPosition: {x: 1, y: 0}
+      side: 1
+      order: 1
+    - color: 2
+      gridPosition: {x: 1, y: 0}
+      side: 1
+      order: 2
+    - color: 2
+      gridPosition: {x: 1, y: 0}
+      side: 1
+      order: 3
+    - color: 2
+      gridPosition: {x: 1, y: 0}
+      side: 1
+      order: 4
+    gridPosition: {x: 1, y: 0}
+    side: 1
+  - passengers:
+    - color: 4
+      gridPosition: {x: 0, y: 4}
+      side: 2
+      order: 0
+    - color: 4
+      gridPosition: {x: 0, y: 4}
+      side: 2
+      order: 1
+    - color: 4
+      gridPosition: {x: 0, y: 4}
+      side: 2
+      order: 2
+    - color: 4
+      gridPosition: {x: 0, y: 4}
+      side: 2
+      order: 3
+    - color: 4
+      gridPosition: {x: 0, y: 4}
+      side: 2
+      order: 4
+    gridPosition: {x: 0, y: 4}
+    side: 2
   cellPrefab: {fileID: 1427225479584640151, guid: 24e1d7e7173d00b4280caa9afdafc2d7,
     type: 3}
   obstaclePrefab: {fileID: 4233259448093636012, guid: 175917e40276e0b448694c3604827fb9,
@@ -131,5 +212,3 @@ MonoBehaviour:
     type: 3}
   wallOffset: 0.6
   innerEdgeOffset: 0.4
-  spriteRenderer: {fileID: 8632815182976248809, guid: ba9c9e4ce4153914c858613450d0acd5,
-    type: 3}
