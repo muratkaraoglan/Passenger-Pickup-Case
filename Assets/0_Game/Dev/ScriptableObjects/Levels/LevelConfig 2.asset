@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 761bc611e5fa465b9d9127c3eb85152e, type: 3}
+  m_Name: LevelConfig 2
+  m_EditorClassIdentifier: 
+  width: 7
+  height: 6
+  cells: []
+  trains: []
+  passengerQueues: []
+  cellPrefab: {fileID: 1427225479584640151, guid: 24e1d7e7173d00b4280caa9afdafc2d7,
+    type: 3}
+  obstaclePrefab: {fileID: 4233259448093636012, guid: 175917e40276e0b448694c3604827fb9,
+    type: 3}
+  wallPrefab: {fileID: 3320737505873927810, guid: 9d6b729527d2d1645a08e766fc096291,
+    type: 3}
+  cornerWallPrefab: {fileID: 4812300869688979223, guid: 68a491904befc334e9ed6f4cc63ed370,
+    type: 3}
+  wallOffset: 0.6
+  innerEdgeOffset: 0.4

@@ -79,6 +79,12 @@ namespace _0_Game.Dev.Scripts.Editor
 
         private void OnGUI()
         {
+            _buttonRects.Clear();
+
+            foreach (var sideDict in _passengerButtonRects.Values)
+            {
+                sideDict.Clear();
+            }
             _customButtonStyle = new GUIStyle(GUI.skin.button)
             {
                 fontSize = 25,

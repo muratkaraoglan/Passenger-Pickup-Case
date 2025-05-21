@@ -49,7 +49,7 @@ namespace _0_Game.Dev.Scripts.Train
             for (int i = transform.childCount - 1; i >= 0; i--)
             {
                 var child = transform.GetChild(i);
-                child.DOScale(Vector3.zero, .1f).SetEase(Ease.InBack);
+                child.DOScale(Vector3.zero, .2f).SetEase(Ease.InBack);
                 yield return Extension.GetWaitForSeconds(.1f);
             }
 

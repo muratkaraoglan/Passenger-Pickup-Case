@@ -19,4 +19,6 @@ MonoBehaviour:
     type: 3}
   trainTailPrefab: {fileID: 5664656869609494318, guid: da80a71a35482d44495c5161b014f321,
     type: 3}
-  characterPrefab: {fileID: 0}
+  characterPrefab: {fileID: 7901237432545480726, guid: 416aa3acab00cb3458a73224d56c5ecb,
+    type: 3}
+  material: {fileID: 2100000, guid: d4ad2c50f5500bb4aa07e11c464ff4be, type: 2}

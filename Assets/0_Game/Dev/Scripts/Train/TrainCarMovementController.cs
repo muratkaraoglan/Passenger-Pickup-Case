@@ -33,6 +33,11 @@ namespace _0_Game.Dev.Scripts.Train
             if (previousTrainCarMovementController == null) isTail = true;
         }
 
+        private void OnDisable()
+        {
+            GridManager.Instance.SetNodeState(transform.position,true);
+        }
+
         public void SetPreviousTrainCarMovementController(TrainCarMovementController preCarMovementController) =>
             previousTrainCarMovementController = preCarMovementController;
 

@@ -15,54 +15,29 @@ namespace _0_Game.Dev.Scripts.Passenger
     {
         [SerializeField] private TrainColor currentGateColor;
         [SerializeField] private List<PassengerController> controllers;
-        private TrainCarMovementController _lastTriggeredTrainCarMovementController;
+        [SerializeField] private TrainCarMovementController _lastTriggeredTrainCarMovementController;
         private MeshRenderer _passageGateMeshRenderer;
+        private bool _isJumpStarted;
 
         public void Init(List<PassengerController> passengers, GameObject passageGateModel)
         {
             controllers = passengers;
-            GameEventsManager.Instance.InputEvents.OnMouseUp += OnMouseUp;
             _passageGateMeshRenderer = passageGateModel.GetComponent<MeshRenderer>();
             ChangeGateColor(passengers[0].Color);
         }
 
-        private void OnDestroy()
+        private void OnTriggerStay(Collider other)
         {
-            GameEventsManager.Instance.InputEvents.OnMouseUp -= OnMouseUp;
-        }
-
-        private void OnMouseUp()
-        {
-            if (_lastTriggeredTrainCarMovementController)
+            if(_isJumpStarted) return; 
+            if (other.TryGetComponent(out _lastTriggeredTrainCarMovementController))
             {
-                StartCoroutine(JumpPassenger(_lastTriggeredTrainCarMovementController));
+                if (!_lastTriggeredTrainCarMovementController.IsMoving())
+                {
+                    StartCoroutine(JumpPassenger(_lastTriggeredTrainCarMovementController));
+                }
             }
         }
 
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.TryGetComponent(out TrainCarMovementController trainCarMovementController))
-            {
-                _lastTriggeredTrainCarMovementController = trainCarMovementController;
-            }
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            _lastTriggeredTrainCarMovementController = null;
-        }
-
-        // private void OnTriggerStay(Collider other)
-        // {
-        //     if (other.TryGetComponent(out TrainCarMovementController trainCarMovementController) && !_isPassengerMoving)
-        //     {
-        //         if (trainCarMovementController.IsMoving()) return;
-        //
-        //         var manager = trainCarMovementController.GetComponentInParent<TrainManager>();
-        //         _isPassengerMoving = true;
-        //         StartCoroutine(JumpPassenger(trainCarMovementController, manager));
-        //     }
-        // }
         private void ChangeGateColor(TrainColor color)
         {
             currentGateColor = color;
@@ -78,12 +53,14 @@ namespace _0_Game.Dev.Scripts.Passenger
             if (!manager.HasEmptySeatPoint()) yield break;
 
             bool isFinished = false;
+            _isJumpStarted = true;
             while (!trainCarMovementController.IsMoving() && !isFinished)
             {
                 var passenger = controllers[0];
                 if (manager.trainColor != passenger.Color)
                 {
                     print("not match color ");
+                    _isJumpStarted = false;
                     yield break;
                 }
 
@@ -110,14 +87,18 @@ namespace _0_Game.Dev.Scripts.Passenger
 
                     yield return Extension.GetWaitForSeconds(.1f);
                 }
-                else
+
+                if (!manager.HasEmptySeatPoint())
                 {
                     print("no seat");
+                    _isJumpStarted = false;
                     manager.StartFullCapacityProcess();
                     yield break;
                 }
             }
 
+            //_lastTriggeredTrainCarMovementController = null;
+            _isJumpStarted = false;
             if (isFinished)
             {
                 Destroy(gameObject);
