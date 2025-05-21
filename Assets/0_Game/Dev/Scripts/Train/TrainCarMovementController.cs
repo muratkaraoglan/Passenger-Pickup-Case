@@ -114,7 +114,7 @@ namespace _0_Game.Dev.Scripts.Train
                 transform.position = Vector3.Lerp(startPos, targetPosition, t);
                 transform.rotation = Quaternion.Slerp(startRot, targetRotation, t);
 
-                await UniTask.Yield(); // yerine UniTask.NextFrame() da kullanılabilir
+                await UniTask.Yield();
             }
 
             transform.position = targetPosition;
